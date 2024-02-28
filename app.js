@@ -18,6 +18,11 @@ app.get('/', (req, res) => {
     res.render('main');
 });
 
+app.get('/watch', (req, res) => {
+  res.render('watch');
+});
+
+
 app.listen(PORT, () => {
   console.log(`http://127.0.0.1:${PORT}`);
 });

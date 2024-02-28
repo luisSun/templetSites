@@ -9,7 +9,10 @@
     padding: 0px; /* Espaçamento interno do card */
     background-color: #424242;
     position: relative;
-    
+}
+
+.card a {
+    text-decoration: none;
 }
 
 .card-img{
@@ -49,6 +52,12 @@
     font-size: 20px;
     margin-bottom: 0px;
 }
+
+.card-text a {
+    text-decoration: none;
+    color: aliceblue;
+}
+
 
 /* Estilos para o footer dos cards */
 .card-text li {
