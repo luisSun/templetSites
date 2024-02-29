@@ -1,0 +1,102 @@
+.main-video-content {
+    display: flex;
+    justify-content: center;
+}
+
+.main-video-content * {
+    text-align: left;
+}
+
+.video-main{
+    width: 720px;
+    height:365px;
+    position: relative;
+    margin-bottom: 5px;
+}
+
+.video-main video{
+    width: 720px;
+    height:365px;
+    background-color: blue;
+}
+
+.video-footer{
+    padding-left: 2px;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Cor preta com 50% de opacidade */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1; /* Garante que a camada esteja acima do vídeo */
+    pointer-events: none; /* Permite que eventos de clique passem pela camada para o vídeo */
+    display: none;
+}
+.video-infos{
+    width: 720px;
+    background-color: #444444;
+    color: antiquewhite;
+    padding-top: 15px;
+    padding-bottom: 20px;
+}
+
+.video-infos li{
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .main-vide-content {
+        padding: 10px; /* Adiciona um pouco de espaço interno */
+    }
+
+    .video-main {
+        position: relative;
+        width: 100%;
+
+    }
+    
+    .video-main video {
+        width: 100%; /* Vídeo se ajustará à largura do contêiner pai */
+        height: auto; /* Mantém a proporção do vídeo */
+    }
+    
+    .video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Cor preta com 50% de opacidade */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1; /* Garante que a camada esteja acima do vídeo */
+        pointer-events: none; /* Permite que eventos de clique passem pela camada para o vídeo */
+        display: none;
+    }
+
+    .video-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .video-infos {
+        width: 100%;
+        max-width: 100%; /* Largura máxima para evitar que o conteúdo fique muito largo */
+        background-color: #444444;
+        color: antiquewhite;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+
+    .video-infos li {
+        margin-bottom: 10px;
+    }
+}

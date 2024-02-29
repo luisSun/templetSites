@@ -1,0 +1,7 @@
+.pag404 {
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* Para centralizar o texto */
+    display: flex; /* Adicionado para centralizar verticalmente */
+    flex-direction: column; /* Para exibir os elementos em uma coluna */
+}
