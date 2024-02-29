@@ -1,25 +1,34 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 
-//const middleware = require('./src/middleware/middleware.js');
+const homeRouter = require('./src/routes/homeRoute');
+const watchRouter = require('./src/routes/watchRoute.js');
+
+const middleware = require('./src/middleware/middleware.js');
 
 //const loginRouter = require('./src/routes/loginroute.js');
 
 const PORT = process.env.PORT || 8083;
 
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/src/views');
-app.use(express.static('F:\\Documentos\\Cursos\\#2024 - Cursos\\JS\\midia'));
-app.use(express.static(__dirname + '/public'));
-app.use(express.urlencoded({ extended: false }));
 
+app.use(express.static(__dirname + '/public/'));
 
-app.get('/', (req, res) => {
-    res.render('main');
-});
+app.use(middleware.staticMiddleware);
+app.use('/media', middleware.mediaMiddleware);
+app.use('/pn', middleware.pnMiddleware);
 
-app.get('/watch', (req, res) => {
-  res.render('watch');
+app.use('/', homeRouter);
+//app.use('/watch', watchRouter);
+
+app.use((req, res, next) => {
+  res.status(404).render('pag404');
 });
 
 

@@ -1,5 +1,28 @@
-<%- include('partials/head.ejs') %>
-<!-- Incio apos o  head/aside -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Template</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/cards.css">
+    <link rel="stylesheet" href="./css/videocontent.css">
+    <link rel="stylesheet" href="./css/404.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body><div class="container">
+    <header>
+        <h1>Header</h1>
+    </header>
+    <main>
+        <div id="aside">
+            <ul>
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+            </ul>
+        </div><!-- Incio apos o  head/aside -->
         <section id="main-content">
             <div class="main">
                 <div class="article">
@@ -7,54 +30,20 @@
                         <h3>Cabeçalho artigo New HD videos</h3>
                     </div>
                     <div class="article-body" id="card-container">
+                        <% for (let i = 0; i < selectedItem.length; i++) { %>
                         <div class="card">
                             <div class="card-img">
-                                <a href="#"><img src="/imgcard.png" alt="Imagem 1"></a>
-                            </div>
-                            <div class="rectangle">
-                                <h5>Nubil</h5>
+                                <a href="/watch/<%= selectedItem[i].id %>"><img class="img-thumb"src="<%= selectedItem[i].cover %>.jpg" alt="<%= selectedItem[i].title %>"></a>
                             </div>
                             <div class="card-text">
-                                <a href="#"><h4>Título 1</h4></a>
-                                <li>atriz, atriz</li>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-img">
-                                <img src="/imgcard.png" alt="Imagem 1">
+                                <a href="#"><h4><%= selectedItem[i].title %></h4></a>
+                                <li><%= selectedItem[i].atriz %></li>
                             </div>
                             <div class="rectangle">
-                                <h5>Nubil</h5>
-                            </div>
-                            <div class="card-text">
-                                <h4>Título 1</h4>
-                                <li>atriz, atriz</li>
+                                <h5><%= selectedItem[i].studio %></h5>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-img">
-                                <img src="/imgcard.png" alt="Imagem 1">
-                            </div>
-                            <div class="rectangle">
-                                <h5>Nubil</h5>
-                            </div>
-                            <div class="card-text">
-                                <h4>Título 1</h4>
-                                <li>atriz, atriz</li>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-img">
-                                <img src="/imgcard.png" alt="Imagem 1">
-                            </div>
-                            <div class="rectangle">
-                                <h5>Nubil</h5>
-                            </div>
-                            <div class="card-text">
-                                <h4>Título 1</h4>
-                                <li>atriz, atriz</li>
-                            </div>
-                        </div>
+                        <% } %>
                     </div>
                 </div>
             </div>
@@ -64,4 +53,7 @@
         <p>Footer</p>
     </footer>
 </div>
-<%- include('partials/body_end.ejs') %>
+<div id="show-aside-square" onclick="toggleAside()">☰</div>
+<script src="/script/script.js"></script>
+</body>
+</html>

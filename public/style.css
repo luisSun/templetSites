@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0 auto; /* Centraliza o container na página */
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 1000px;
+}
+
+header, footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+}
+
+main {
+    flex: 1;
+    display: flex;
+}
+
+
+#aside {
+    display: block;
+    background-color: #f4f4f4;
+    padding: 1rem;
+    width: 20%; /* Largura do aside */
+}
+
+section {
+    flex: 1;
+    padding: 1rem;
+}
+
+#show-aside-square {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 0px;
+    width: 100px;
+    height: 100px;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    line-height: 85px;
+    cursor: pointer;
+    z-index: 9995;
+    font-size: 40px;
+}
+
+@media (max-width: 768px) {
+    #aside {
+        display: none;
+        background-color: #f4f4f4;
+        padding: 10px;
+        top: 0;
+        left: 0;
+        width: 50%; /* Tamanho total ao abrir */
+        height: 100vh; /* Tamanho total ao abrir */
+        position: fixed;
+        z-index: 99999999; /* Inicia atrás de todos os elementos */
+        background-color: aqua;
+    }
+    #show-aside-square {
+        display: block;
+    }
+}

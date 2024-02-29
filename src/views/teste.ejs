@@ -1,0 +1,57 @@
+<%- include('partials/head.ejs') %>
+<%- include('partials/aside.ejs') %>
+<!-- Incio apos o  head/aside -->
+        <section id="main-content">
+            <div class="main">
+                <div class="article">
+                    <div class="article-header">
+                        <h3><%= selectedItem.title %></h3>
+                    </div>
+                    <div class="article-body" id="card-container">
+                        <div class="main-vide-content">
+                            <div class="video-part">
+                                <div class="vieo-header">
+                                    
+                                </div>
+                                <div class="video-main">
+                                    <video class="midia-vid" data-video-id="<%= selectedItem.id %>" controls poster="<%= selectedItem.cover %>.jpg" muted>
+                                        <source src="/pn/<%= selectedItem.midia %>" type="video/mp4">
+                                        Seu navegador não suporta o elemento de vídeo.
+                                    </video> 
+                                    <div class="video-overlay">
+                                        <button id="btnContinue">Continuar</button>
+                                        <button id="btnRestart">Voltar do Início</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="video-footer">
+                                <div class="video-infos">
+                                    <ul class="infos">                                
+                                        <li><i class="ftags-capt fa fa-calendar"></i> Released: 28.02.2024</li>
+                                        <li><i class="fas fa-tachometer-alt"></i> Duration: 00:27:47</li>
+                                        <li><i class="ftags-capt fa fa-star"></i> Star: <%= selectedItem.atriz %></li>
+                                        <li><i class="fas fa-video"></i> Studio: <%= selectedItem.studio %></li>
+        
+                                        <ul>
+                                            <li>Tags:</li>
+                                        </ul>
+                                    </ul>
+                                </div>
+                                <div class="recomendacoes">
+                                    <p> adicionar uma pequena carroseul com recomendações </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>Footer</p>
+    </footer>
+</div>
+<%- include('partials/body_end.ejs') %>
+<script>
+
+</script>
