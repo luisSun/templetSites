@@ -1,28 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Template</title>
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/cards.css">
-    <link rel="stylesheet" href="./css/videocontent.css">
-    <link rel="stylesheet" href="./css/404.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-<body><div class="container">
-    <header>
-        <h1>Header</h1>
-    </header>
-    <main>
-        <div id="aside">
-            <ul>
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
-            </ul>
-        </div><!-- Incio apos o  head/aside -->
+<%- include('partials/head.ejs') %>
+<%- include('partials/aside.ejs') %>
         <section id="main-content">
             <div class="main">
                 <div class="article">
@@ -37,7 +14,7 @@
                             </div>
                             <div class="card-text">
                                 <a href="#"><h4><%= selectedItem[i].title %></h4></a>
-                                <li><%= selectedItem[i].atriz %></li>
+                                <li><i class="fas fa-star"></i> Atriz: <%= selectedItem[i].atriz %></li>
                             </div>
                             <div class="rectangle">
                                 <h5><%= selectedItem[i].studio %></h5>
@@ -54,6 +31,8 @@
     </footer>
 </div>
 <div id="show-aside-square" onclick="toggleAside()">☰</div>
-<script src="/script/script.js"></script>
+<script src="/script/script.js">
+
+</script>
 </body>
 </html>

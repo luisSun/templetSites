@@ -1,0 +1,93 @@
+#aside {
+    display: block;
+    background-color: #222222;
+    width: 20%; /* Largura do aside */
+    padding: 0px;
+    padding-left: 5px;
+}
+
+#show-aside-square {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 0px;
+    width: 100px;
+    height: 100px;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    line-height: 85px;
+    cursor: pointer;
+    z-index: 9995;
+    font-size: 40px;
+    background-color: aqua;
+}
+
+.ul-aside {
+    margin: 0px;
+    padding: 0px;
+}
+
+#aside li {
+    list-style-type: none; /* Remove a bolinha padrão */
+    padding-left: 16px;
+    background-color: #222222;
+    color: #f4f4f4;
+    border: 1px solid #000; /* Borda mais fina */
+    position: relative; /* Adiciona posição relativa */
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#aside a {
+    text-decoration: none;
+    color: #f4f4f4;
+}
+
+#aside li::before {
+    content: "•"; /* Insert content that looks like bullets */
+    padding-right: 8px;
+    color: #e74c3c; /* Cor padrão do bullet */
+    font-size: 24px; /* Tamanho padrão do bullet */
+    display: inline-block; /* Exibe o bullet como um bloco inline */
+    position: absolute; /* Adiciona posição absoluta */
+    left: 0; /* Alinha o bullet à esquerda */
+    top: 50%; /* Alinha verticalmente */
+    transform: translateY(-50%); /* Corrige o alinhamento vertical */
+    z-index: 1; /* Garante que o bullet esteja acima do texto */
+}
+
+#aside li:hover::before {
+    color: #fff; /* Altera a cor do bullet para vermelho ao passar o mouse */
+    transition: all 0.1s; /* Adiciona uma transição suave */
+}
+
+#aside li:hover {
+    list-style-type: none; /* Remove o estilo de lista */
+    background-color: #e74c3c;
+}
+
+#aside li {
+    padding-left: 24px; /* Espaçamento à esquerda para o texto */
+    display: flex; /* Usa flexbox para alinhar o texto verticalmente */
+    align-items: center; /* Centraliza o texto verticalmente */
+}
+
+@media (max-width: 768px) {
+    #aside {
+        display: none;
+        background-color: #f4f4f4;
+        padding: 10px;
+        top: 0;
+        left: 0;
+        width: 60%; /* Tamanho total ao abrir */
+        height: 100vh; /* Tamanho total ao abrir */
+        position: fixed;
+        z-index: 99999999; /* Inicia atrás de todos os elementos */
+        background-color: aqua;
+        padding-left: 5px;
+    }
+    #show-aside-square {
+        display: block;
+    }
+}

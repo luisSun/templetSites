@@ -23,6 +23,7 @@ app.use(express.static(__dirname + '/public/'));
 app.use(middleware.staticMiddleware);
 app.use('/media', middleware.mediaMiddleware);
 app.use('/pn', middleware.pnMiddleware);
+app.use('/pn', middleware.pnmdMiddleware);
 
 app.use('/', homeRouter);
 //app.use('/watch', watchRouter);
