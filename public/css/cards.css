@@ -5,10 +5,10 @@
     margin: 1%; /* Margem entre os cards */
     float: left; /* Flutua os cards para a esquerda */
     box-sizing: border-box; /* Inclui padding e borda na largura e altura */
-    border: 1px solid #ccc; /* Borda para separar os cards */
     padding: 0px; /* Espaçamento interno do card */
     background-color: #424242;
     position: relative;
+    box-shadow: 0 2px 4px rgb(0, 0, 0);
 }
 
 .card a {
@@ -31,21 +31,26 @@
     position: absolute;
     top: 59%;
     left: 4%;
-    width: 31%;
-    height: 10%;
+    min-width: 80px; /* Largura mínima */
+    height: 30px;
     background: linear-gradient(to right, #ec7a21 50%, #d45302 100%);
-    z-index: 9998; /* Garante que o retângulo fique acima das outras camadas */
+    z-index: 9998;
     color: antiquewhite;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center; /* Alinha o texto horizontalmente */
-    box-shadow: 0 2px 4px rgb(0, 0, 0); /* Sombra suave */
+    display: inline-block; /* Permite ajustar a largura com base no conteúdo */
+    padding-left: 10px; /* Espaçamento interno de 10px no topo e na base, e 20px nos lados */
+    padding-right: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgb(0, 0, 0);
+    white-space: nowrap; /* Evita quebra de linha */
+    overflow: hidden; /* Esconde conteúdo que extrapola a largura */
+    text-overflow: ellipsis; /* Exibe reticências (...) quando o conteúdo é cortado */
 }
 
 .rectangle h5 {
-    margin: 0; /* Remove as margens padrão do h4 */
-    margin-bottom: 0px;
+    margin-top: 9px;
+    top: 9%;
+    left: 4%;
+    font-size: 14px;
 }
 
 .card-text{
@@ -55,26 +60,51 @@
 }
 /* Estilos para o título dos cards */
 .card-text h4 {
-    font-size: 18px;
+    font-size: 15px;
+    margin: 35px 0px 25px 0px;
+    white-space: nowrap; /* Evita quebra de linha */
+    overflow: hidden; /* Esconde o texto que extrapola a largura */
+    text-overflow: ellipsis; /* Exibe reticências (...) quando o texto é cortado */
+    max-width: 45ch; /* Define o máximo de 35 caracteres */
 }
-
 .card-text a {
     text-decoration: none;
     color: aliceblue;
 }
 
-
 /* Estilos para o footer dos cards */
 .card-text li {
-    top: -10px;
+    list-style-type: none; /* Remove a bolinha padrão */
     font-weight: lighter;
     padding-left: 5px;
 }
 
 /* Estilos para a responsividade (um card por linha em telas menores) */
 @media (max-width: 768px) {
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0; /* Remove as margens padrão do body */
+        padding: 0; /* Remove o padding padrão do body */
+    }
     .card {
-        width: 90%; /* Card ocupa 90% da largura do contêiner para um por linha em telas menores */
-        margin: 5% 0; /* Margem superior e inferior */
+        width: 500px;
+        height: 309px;
+        /* Outros estilos */
+    }
+
+    .card-img {
+        width: 500px;
+        /* Outros estilos */
+    }
+
+    .card-text h4 {
+        font-size: 15px;
+        margin: 35px 0px 25px 0px;
+        white-space: nowrap; /* Evita quebra de linha */
+        overflow: hidden; /* Esconde o texto que extrapola a largura */
+        text-overflow: ellipsis; /* Exibe reticências (...) quando o texto é cortado */
+        max-width: 90ch; /* Define o máximo de 35 caracteres */
     }
 }

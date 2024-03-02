@@ -17,7 +17,7 @@
 .video-main video{
     width: 720px;
     height:365px;
-    background-color: blue;
+    background-color: #333333;
 }
 
 .video-footer{
@@ -50,7 +50,30 @@
     margin-bottom: 10px;
 }
 
-@media screen and (max-width: 768px) {
+.tag-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.tag-list li {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.tag-button {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.tag-button:hover {
+    background-color: #000000;
+}
+
+@media screen and (max-width: 600px) {
     .main-vide-content {
         padding: 10px; /* Adiciona um pouco de espaço interno */
     }
@@ -58,14 +81,18 @@
     .video-main {
         position: relative;
         width: 100%;
-
     }
-    
+
     .video-main video {
         width: 100%; /* Vídeo se ajustará à largura do contêiner pai */
         height: auto; /* Mantém a proporção do vídeo */
     }
-    
+
+    .minha-video{
+        width: 100%; /* Vídeo se ajustará à largura do contêiner pai */
+        height: auto; /* Mantém a proporção do vídeo */
+    }
+
     .video-overlay {
         position: absolute;
         top: 0;
@@ -94,6 +121,7 @@
         color: antiquewhite;
         padding: 15px;
         box-sizing: border-box;
+        margin-top: 0; /* Remove qualquer margem superior */
     }
 
     .video-infos li {
