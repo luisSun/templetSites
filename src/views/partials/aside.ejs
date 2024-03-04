@@ -1,8 +1,9 @@
 <div id="aside">
+    <li><i class="fas fa-video icone-li"> </i> Studios</li>
     <ul class="ul-aside">
-        <li><i class="fas fa-video icone-li"></i> Studios</li>
+        
         <% studios.forEach(studio => { %>
-            <li class="li-aside"><a href="#"><%= studio.studio %></a></li>
+            <a href="/main/studios/<%= studio.studio %>"><li class="li-aside"><%= studio.studio %></li></a>
         <% }); %>
     </ul>
 </div>

@@ -19,14 +19,17 @@ header, footer {
 main {
     flex: 1;
     display: flex;
-    background-color: #424242;
+    background-color: #333333;
     justify-content: center;
 }
-
-
-
 
 section {
     flex: 1;
     padding: 1rem;
+}
+
+.article-header{
+    color: rgb(255, 255, 255);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 20px;
 }
