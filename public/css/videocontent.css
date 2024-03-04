@@ -3,9 +3,11 @@
     justify-content: center;
 }
 
-.main-video-content * {
-    text-align: left;
+.main-video-content a{
+    text-decoration: none;
 }
+
+
 
 .video-main{
     width: 720px;
@@ -17,7 +19,7 @@
 .video-main video{
     width: 720px;
     height:365px;
-    background-color: #333333;
+    background-color: #000000;
 }
 
 .video-footer{
@@ -44,6 +46,12 @@
     color: antiquewhite;
     padding-top: 15px;
     padding-bottom: 20px;
+    box-shadow: 0 2px 4px rgb(0, 0, 0);
+}
+
+.video-infos a{
+    text-decoration: none;
+    color: antiquewhite;
 }
 
 .video-infos li{

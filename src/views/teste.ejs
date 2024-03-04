@@ -29,13 +29,19 @@
                                     <ul class="infos">                                
                                         <li><i class="ftags-capt fa fa-calendar"></i> Released: 28.02.2024</li>
                                         <li><i class="fas fa-tachometer-alt"></i> Duration: 00:27:47</li>
-                                        <li><i class="ftags-capt fa fa-star"></i> Star: <%= selectedItem.atriz %></li>
-                                        <li><i class="fas fa-video"></i> Studio: <%= selectedItem.studio %></li>
+
+                                        <li>
+                                            <i class="ftags-capt fa fa-star"></i> Star:
+                                            <% atrizArray.forEach((atriz, index) => { %>
+                                                <% if (index > 0) { %>, <% } %><a href="/main/atriz/<%= atriz %>"><%= atriz %></a>
+                                            <% }); %>
+                                        </li>
+                                        <li><i class="fas fa-video"></i> Studio: <a href="/main/studios/<%= selectedItem.studio %>"><%= selectedItem.studio %></a></li>
         
                                         <ul class="tag-list">
                                             <li><i class="fa fa-archive" aria-hidden="true"></i> Tags:</li>
                                             <% tagsArray.forEach(tag => { %>
-                                                <li><a href="#" class="tag-button"><%= tag %></a></li>
+                                                <li><a href="/main/<%= tag %>" class="tag-button"><%= tag %></a></li>
                                             <% }); %>
                                         </ul>
                                     </ul>
