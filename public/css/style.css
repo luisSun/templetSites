@@ -33,3 +33,47 @@ section {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 20px;
 }
+
+
+/* Estilos para o formulário */
+.form-enviar {
+    max-width: 800px; /* Define a largura máxima do formulário */
+    margin: 0 auto; /* Centraliza o formulário na página */
+    padding: 20px; /* Adiciona um espaçamento interno ao formulário */
+    border: 1px solid #ccc; /* Adiciona uma borda ao redor do formulário */
+    border-radius: 5px; /* Adiciona cantos arredondados ao formulário */
+    background-color: #f9f9f9; /* Define a cor de fundo do formulário */
+}
+
+/* Estilos para os rótulos dos campos */
+.form-enviar label {
+    display: block; /* Faz com que os rótulos ocupem uma linha inteira */
+    margin-bottom: 5px; /* Adiciona um espaçamento entre os rótulos e os campos */
+    font-weight: bold; /* Define a fonte em negrito para os rótulos */
+}
+
+/* Estilos para os campos de entrada de texto e select */
+.form-enviar input[type="text"],
+.form-enviar select {
+    width: 100%; /* Define a largura dos campos como 100% */
+    padding: 5px; /* Adiciona um espaçamento interno aos campos */
+    margin-bottom: 10px; /* Adiciona um espaçamento entre os campos */
+    border: 1px solid #ccc; /* Adiciona uma borda aos campos */
+    border-radius: 3px; /* Adiciona cantos arredondados aos campos */
+}
+
+/* Estilos para o botão de envio */
+.form-enviar input[type="submit"] {
+    width: 100%; /* Define a largura do botão como 100% */
+    padding: 10px; /* Adiciona um espaçamento interno ao botão */
+    border: none; /* Remove a borda do botão */
+    border-radius: 3px; /* Adiciona cantos arredondados ao botão */
+    background-color: #007bff; /* Define a cor de fundo do botão */
+    color: #fff; /* Define a cor do texto do botão como branco */
+    cursor: pointer; /* Altera o cursor ao passar sobre o botão */
+}
+
+/* Estilos para o botão de envio ao passar o mouse sobre ele */
+.form-enviar input[type="submit"]:hover {
+    background-color: #0056b3; /* Altera a cor de fundo ao passar o mouse sobre o botão */
+}

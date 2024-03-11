@@ -1,7 +1,7 @@
 # TODO: [ ] - Criar nav
-# TODO: [ ] - Criar pag tags/rota
-# TODO: [ ] - Criar pag atriz/rota
-# TODO: [ ] - Criar pag studio/rota
+# TODO: [X] - Criar pag tags/rota
+# TODO: [X] - Criar pag atriz/rota
+# TODO: [X] - Criar pag studio/rota
 # TODO: [ ] - Auth
 # TODO: [ ] - Pagina User
 # TODO: [ ] - JS de onde parou de assistir
