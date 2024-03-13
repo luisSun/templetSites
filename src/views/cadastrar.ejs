@@ -1,0 +1,55 @@
+<%- include('partials/head.ejs') %>
+<%- include('partials/aside_adm.ejs') %>
+        <section id="main-content">
+            <div class="main">
+                <div class="article">
+                    <div class="article-header">
+                        <h3>Cadastrar</h3>
+                    </div>
+                    <div class="article-body" id="card-container">
+                        <form class="form-enviar" action="/add" method="POST">
+
+                            <label for="title">Título:</label>
+                            <input type="text" id="title" name="title" required><br><br>
+
+                            <label for="studio">Studio:</label>
+                            <input type="text" id="studio" name="studio" required><br><br>
+        
+                            <label for="atriz">Atriz:</label>
+                            <input type="text" id="atriz" name="atriz" required><br><br>
+        
+                            <label for="capa">Capa:</label>
+                            <input type="text" id="capa" name="capa" required><br><br>
+        
+                            <label for="midia">Mídia:</label>
+                            <input type="text" id="midia" name="midia" required><br><br>
+                            <select name="tipoMidia" id="tipoMidia">
+                                <option value="mp4">MP4</option>
+                                <option value="avi">AVI</option>
+                                <option value="wmv">WMV</option>
+                            </select><br><br>
+        
+                            <label for="tags">Tags:</label>
+                            <input type="text" id="tags" name="tags" required><br><br>
+
+                            <label for="ativo">Ativo:</label>
+                            <select name="ativo" id="ativo">
+                                <option value="a">A</option>
+                                <option value="i">I</option>
+                            </select><br><br>
+                            <input type="submit" value="Adicionar">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="pag">
+    </footer>
+</div>
+<div id="show-aside-square" onclick="toggleAside()">☰</div>
+<script src="/script/script.js">
+
+</script>
+</body>
+</html>

@@ -1,58 +1,55 @@
 <%- include('partials/head.ejs') %>
-<%- include('partials/aside.ejs') %>
-        <section id="main-content">
-            <div class="main">
-                <div class="article">
-                    <div class="article-header">
-                        <h3>Cabeçalho artigo New HD videos</h3>
-                    </div>
-                    <div class="article-body" id="card-container">
-                        <form class="form-enviar" action="/add" method="POST">
-
-                            <label for="title">Título:</label>
-                            <input type="text" id="title" name="title" required><br><br>
-
-                            <label for="studio">Studio:</label>
-                            <input type="text" id="studio" name="studio" required><br><br>
-        
-                            <label for="atriz">Atriz:</label>
-                            <input type="text" id="atriz" name="atriz" required><br><br>
-        
-                            <label for="capa">Capa:</label>
-                            <input type="text" id="capa" name="capa" required><br><br>
-        
-                            <label for="midia">Mídia:</label>
-                            <input type="text" id="midia" name="midia" required><br><br>
-                            <select name="tipoMidia" id="tipoMidia">
-                                <option value="mp4">MP4</option>
-                                <option value="avi">AVI</option>
-                                <option value="wmv">WMV</option>
-                            </select><br><br>
-        
-                            <label for="tags">Tags:</label>
-                            <input type="text" id="tags" name="tags" required><br><br>
-
-                            <label for="ativo">Ativo:</label>
-                            <select name="ativo" id="ativo">
-                                <option value="a">A</option>
-                                <option value="i">I</option>
-                            </select><br><br>
-                            <input type="submit" value="Adicionar">
+<%- include('partials/aside_adm.ejs') %>
+<section id="main-content">
+  <div class="main">
+    <div class="article">
+      <div class="article-header">
+        <h3>Admin</h3>
+      </div>
+      <div class="article-body" id="card-container">
+        <div class="ativosmeme" style="background-color: white;">
+            <ul id="content">
+                <% for (let i = 0; i < selectedItemA.length; i++) { %>
+                    <li>
+                        <a href="/watch/<%= selectedItemA[i].id %>"><%= selectedItemA[i].title %></a>
+                        <span style="float:right;">
+                            <button onclick="mostrar(`<%= selectedItemA[i].id %>`)">mostrar</button>
+                            <button onclick="editar(`<%= selectedItemA[i].id %>`)">Editar</button>
+                            <button onclick="inativar(`<%= selectedItemA[i].id %>`)">Inativar</button>
+                        </span>
+                        <div style="clear:both;"></div>
+                        <!-- Formulário de edição -->
+                        <form id="form-<%= selectedItemA[i].id %>" style="display:none;">
+                            <!-- Campos do formulário -->
+                            <!-- Por exemplo, um campo de texto para o título -->
+                            <input type="text" name="title" value="<%= selectedItemA[i].title %>">
+                            <!-- Um campo de botão para enviar o formulário -->
+                            <button type="submit">Salvar</button>
                         </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-    <footer class="pag">
-        <% for (let i = 1; i <= totalPages; i++) { %>
-            <a href="/?page=<%= i %>"><%= i %></a>
-        <% } %>
-    </footer>
+                    </li>
+                <% } %>              
+            </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="pag">
+</footer>
 </div>
 <div id="show-aside-square" onclick="toggleAside()">☰</div>
-<script src="/script/script.js">
 
+<script>
+    // Função para mostrar o formulário de edição
+    function editar(id) {
+        // Oculta todos os formulários de edição
+        document.querySelectorAll('[id^="form-"]').forEach(form => {
+            form.style.display = 'none';
+        });
+        // Mostra o formulário específico
+        document.getElementById('form-' + id).style.display = 'block';
+    }
 </script>
 </body>
 </html>
