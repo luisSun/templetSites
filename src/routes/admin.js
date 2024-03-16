@@ -32,21 +32,20 @@ router.get(['/adm'], async (req, res) => {
 
 
   // Rota para lidar com o envio do formulário
-  router.post('/add', async (req, res) => {
-
-    console.log(req.body)
-    try {
-        const { title, studio, atriz, capa, midia, tipoMidia, tags, ativo } = req.body;
-        const midiac = midia + '.' + tipoMidia;
-    
-        // Insira os dados no banco de dados
-        await executeQuery('INSERT INTO pn (title, studio, atriz, cover, midia, tags, ativo) VALUES (?, ?, ?, ?, ?, ?, ?)', [title, studio, atriz, capa, midiac, tags, ativo]);
-        
-        res.redirect('/'); // Redireciona para a página principal após adicionar o item
-    } catch (error) {
-        console.error('Erro ao adicionar item', error);
-        res.status(500).send('Erro ao adicionar item');
-    }
+router.post('/add', async (req, res) => {
+  console.log(req.body)
+  try {
+      const { title, studio, atriz, capa, midia, tipoMidia, tags, ativo } = req.body;
+      const midiac = midia + '.' + tipoMidia;
+  
+      // Insira os dados no banco de dados
+      await executeQuery('INSERT INTO pn (title, studio, atriz, cover, midia, tags, ativo) VALUES (?, ?, ?, ?, ?, ?, ?)', [title, studio, atriz, capa, midiac, tags, ativo]);
+      
+      res.redirect('/'); // Redireciona para a página principal após adicionar o item
+  } catch (error) {
+      console.error('Erro ao adicionar item', error);
+      res.status(500).send('Erro ao adicionar item');
+  }
 });
 
 router.get(['/adm/inativo'], async (req, res) => {

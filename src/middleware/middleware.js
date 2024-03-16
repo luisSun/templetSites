@@ -11,7 +11,7 @@ const mediaMiddleware = express.static('F:\\Documentos\\Cursos\\#2024 - Cursos\\
         res.setHeader('Content-Type', 'video/mp4');
     } else if (path.endsWith('.wmv')) {
         res.setHeader('Content-Type', 'video/x-ms-wmv');
-    }
+    } 
   }
 });
 
