@@ -26,8 +26,10 @@
             </div>
         </section>
     </main>
-    <footer>
-        <p>Footer</p>
+    <footer class="pag">
+        <% for (let i = 1; i <= totalPages; i++) { %>
+            <a href="/?page=<%= i %>"><%= i %></a>
+        <% } %>
     </footer>
 </div>
 <div id="show-aside-square" onclick="toggleAside()">☰</div>

@@ -4,4 +4,7 @@
     text-align: center; /* Para centralizar o texto */
     display: flex; /* Adicionado para centralizar verticalmente */
     flex-direction: column; /* Para exibir os elementos em uma coluna */
+    background-color: brown;
+    color: aliceblue;
+    font-size: 40px;
 }

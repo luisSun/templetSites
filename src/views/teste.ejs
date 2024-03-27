@@ -15,7 +15,7 @@
                                 </div>
                                 <div class="video-main">
                                     <video class="midia-vid" data-video-id="<%= selectedItem.id %>" controls poster="<%= selectedItem.cover %>.jpg" muted>
-                                        <source src="/pn/<%= selectedItem.midia %>" type="video/mp4">
+                                        <source src="/pn/<%= selectedItem.midia %>">
                                         Seu navegador não suporta o elemento de vídeo.
                                     </video> 
                                     <div class="video-overlay">
@@ -41,7 +41,7 @@
                                         <ul class="tag-list">
                                             <li><i class="fa fa-archive" aria-hidden="true"></i> Tags:</li>
                                             <% tagsArray.forEach(tag => { %>
-                                                <li><a href="/main/<%= tag %>" class="tag-button"><%= tag %></a></li>
+                                                <li><a href="/main/tags/<%= tag %>" class="tag-button fa fa-tag"> <%= tag %></a></li>
                                             <% }); %>
                                         </ul>
                                     </ul>

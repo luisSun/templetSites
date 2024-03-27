@@ -1,0 +1,103 @@
+<%- include('partials/head.ejs') %>
+<%- include('partials/aside_adm.ejs') %>
+        <section id="main-content">
+            <div class="main">
+                <div class="article">
+                    <div class="article-header">
+                        <h3>Cadastrar</h3>
+                    </div>
+                    <div class="article-body" id="card-container">
+                        <form class="form-enviar" action="/add" method="POST">
+
+                            <label for="title">Título:</label>
+                            <input type="text" id="title" name="title" required><br><br>
+
+                            <label for="studio">Studio:</label>
+                            <input type="text" id="studio" name="studio" list="studiosList">
+                            <datalist id="studiosList">
+                                <!-- Lista de sugestões inicial -->
+                            </datalist><br><br>
+
+                            <label for="atriz">Atriz:</label>
+                            <input type="text" id="atriz" name="atriz" required><br><br>
+        
+                            <label for="capa">Capa:</label>
+                            <input type="text" id="capa" name="capa" required><br><br>
+        
+                            <label for="midia">Mídia:</label>
+                            <input type="text" id="midia" name="midia" required><br><br>
+                            <select name="tipoMidia" id="tipoMidia">
+                                <option value="mp4">MP4</option>
+                                <option value="avi">AVI</option>
+                                <option value="wmv">WMV</option>
+                            </select><br><br>
+        
+                            <label for="tags">Tags:</label>
+                            <input type="text" id="tags" name="tags" required><br><br>
+
+                            <label for="ativo">Ativo:</label>
+                            <select name="ativo" id="ativo">
+                                <option value="a">A</option>
+                                <option value="i">I</option>
+                            </select><br><br>
+                            <input type="submit" value="Adicionar">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="pag">
+    </footer>
+</div>
+<div id="show-aside-square" onclick="toggleAside()">☰</div>
+
+<script>
+    const studioInput = document.getElementById('studio');
+    const studiosList = document.getElementById('studiosList');
+
+    let termoPesquisa = '';
+
+    studioInput.addEventListener('input', async () => {
+        termoPesquisa = studioInput.value;
+        const response = await fetch(`/autocompletar?studio=${termoPesquisa}`);
+        const suggestions = await response.json();
+
+        // Limpar sugestões existentes
+        studiosList.innerHTML = '';
+
+        // Adicionar sugestões ao datalist
+        suggestions.forEach(suggestion => {
+            const option = document.createElement('option');
+            option.value = suggestion.studio;
+            studiosList.appendChild(option);
+        });
+    });
+
+    studioInput.addEventListener('keydown', async (event) => {
+        if (event.key === ',') {
+            const termos = termoPesquisa.split(',').map(termo => termo.trim());
+            const ultimoTermo = termos.pop();
+            
+            if (ultimoTermo.trim() !== '') {
+                const response = await fetch(`/autocompletar?studio=${ultimoTermo}`);
+                const suggestions = await response.json();
+
+                // Limpar sugestões existentes
+                studiosList.innerHTML = '';
+
+                // Adicionar sugestões ao datalist
+                suggestions.forEach(suggestion => {
+                    const option = document.createElement('option');
+                    option.value = suggestion.studio;
+                    studiosList.appendChild(option);
+                });
+            }
+        }
+    });
+</script>
+
+
+
+</body>
+</html>
