@@ -4,23 +4,34 @@ const executeQuery = require('../db/db');
 
 
 router.get(['/adm'], async (req, res) => {
-    try {
+  try {
+      const limit = 12;
+      const page = req.query.page || 1;
+      const offset = (page - 1) * limit;
 
-      const selectedItemA = await executeQuery('SELECT * FROM pn WHERE ativo = "A" ORDER BY id DESC LIMIT 3 ');
+      const selectedItemA = await executeQuery(`SELECT * FROM pn ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`);
       const selectedItemI = await executeQuery('SELECT * FROM pn WHERE ativo = "A"');
 
-    if (!selectedItemA || selectedItemA.length === 0) {
-      throw new Error('Nenhum item encontrado para o ID fornecido.');
-    }
-  
-      res.render('admin', { selectedItemA: selectedItemA, selectedItemI: selectedItemI });
-    } catch (error) {
+      const totalItems = await executeQuery('SELECT COUNT(*) AS total FROM pn');
+      const totalPages = Math.ceil(totalItems[0].total / limit);
+
+      if (!selectedItemA || selectedItemA.length === 0) {
+          throw new Error('Nenhum item encontrado para o ID fornecido.');
+      }
+
+      res.render('admin', { selectedItemA: selectedItemA, selectedItemI: selectedItemI, page: page, totalPages: totalPages });
+  } catch (error) {
       console.error('Erro ao recuperar dados do item', error);
       res.status(500).send('Erro ao recuperar dados do item');
-    }
-  });
+  }
+});
 
-  router.get(['/adm/add'], async (req, res) => {
+
+/*
+//Rota para Adicionar novo Conteudo
+//GET
+*/
+router.get(['/adm/add'], async (req, res) => {
     try {
         // Assuming selectedItem is defined elsewhere
         res.render('cadastrar');
@@ -30,16 +41,45 @@ router.get(['/adm'], async (req, res) => {
     }
 });
 
+router.get('/autocompletar', async (req, res) => {
+    const studio = req.query.studio;
+    const termos = studio.split(',').map(termo => termo.trim());
+    const ultimoTermo = termos.pop();
+    const query = 'SELECT DISTINCT studio FROM pn WHERE studio LIKE ? LIMIT 5';
+    try {
+        const results = await executeQuery(query, [`%${ultimoTermo}%`]);
+        console.log(results)
+        res.json(results);
+    } catch (error) {
+        console.error('Erro ao buscar dados para autocompletar', error);
+        res.status(500).json({ error: 'Erro ao buscar dados para autocompletar' });
+    }
+});
 
-  // Rota para lidar com o envio do formulário
+
+/*
+//Rota para Adicionar novo Conteudo
+//POST
+*/
+
 router.post('/add', async (req, res) => {
   console.log(req.body)
   try {
       const { title, studio, atriz, capa, midia, tipoMidia, tags, ativo } = req.body;
       const midiac = midia + '.' + tipoMidia;
+      // Tratamento das tags
+      const formattedTags = tags.split(',').map(tag => {
+        // Remover espaços em branco antes e depois da tag
+        tag = tag.trim();
+    
+        // Converter a primeira letra de cada palavra para maiúscula
+        tag = tag.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+    
+        return tag;
+    }).filter(tag => tag !== '').join(', ');
   
       // Insira os dados no banco de dados
-      await executeQuery('INSERT INTO pn (title, studio, atriz, cover, midia, tags, ativo) VALUES (?, ?, ?, ?, ?, ?, ?)', [title, studio, atriz, capa, midiac, tags, ativo]);
+      await executeQuery('INSERT INTO pn (title, studio, atriz, cover, midia, tags, ativo) VALUES (?, ?, ?, ?, ?, ?, ?)', [title, studio, atriz, capa, midiac, formattedTags, ativo]);
       
       res.redirect('/'); // Redireciona para a página principal após adicionar o item
   } catch (error) {
@@ -48,56 +88,29 @@ router.post('/add', async (req, res) => {
   }
 });
 
-router.get(['/adm/inativo'], async (req, res) => {
-  try {
-    const page = req.query.page || 1;
-    const limit = 12;
-    const offset = (page - 1) * limit;
+/*
+//Rota para EDITAR Conteudo
+//GET
+*/
 
-    const studios = await executeQuery('SELECT DISTINCT studio FROM pn ORDER BY studio');
+router.post(['/adm/editar'], async (req, res) => {
+  const { id, title, atriz, studio, tags, cover, midia, ativo } = req.body;
+  console.log(title, atriz, studio, tags, midia, ativo)
+  const formattedTags = tags.split(',').map(tag => {
+    // Remover espaços em branco antes e depois da tag
+    tag = tag.trim();
 
-    const selectedItem = await executeQuery(`SELECT * FROM pn WHERE ativo = "I" ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`);
+    // Converter a primeira letra de cada palavra para maiúscula
+    tag = tag.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
 
-    const totalItems = await executeQuery('SELECT COUNT(*) AS total FROM pn WHERE ativo = "I"');
-    const totalPages = Math.ceil(totalItems[0].total / limit);
+    return tag;
+}).filter(tag => tag !== '').join(', ');
 
-    const tagsArray = selectedItem[0]?.tag ? selectedItem[0].tag.split(',') : [];
-    const valor = ['Filmes Uncensured', 'javunc', 'javunc', 'jav'];
 
-    res.render('main', { selectedItem, tagsArray, valor, studios, totalPages });
-  } catch (error) {
-    console.error('Erro ao recuperar dados do item', error);
-    res.status(500).send('Erro ao recuperar dados do item');
-  }
-});
-
-router.get(['/adm/inativo/:id'], async (req, res) => {
-  try {
-    const itemId = req.params.id;
-    const page = req.query.page || 1;
-    const limit = 12;
-    const offset = (page - 1) * limit;
-
-    const studios = await executeQuery('SELECT DISTINCT studio FROM pn WHERE ativo = "A" ORDER BY studio');
-
-    const totalItems = await executeQuery('SELECT COUNT(*) AS total FROM pn WHERE tags LIKE ? AND ativo = "I"', [`%${itemId}%`]);
-    const totalPages = Math.ceil(totalItems[0].total / limit);
-
-    const selectedItem = await executeQuery('SELECT * FROM pn WHERE FIND_IN_SET(?, tags) AND ativo = "I"', [itemId]);
-
-    if (!selectedItem || selectedItem.length === 0) {
-      throw new Error('Nenhum item encontrado para o ID fornecido.');
-    }
-    
-    //[1=Title, 2=link video, 3=link img, 4=botao ir main]
-    const valor = ['Filmes Idol', 'idol', 'idol', 'idol'];
-    console.log(selectedItem)
-
-    res.render('teste', { selectedItem: selectedItem, valor, studios, totalPages });
-  } catch (error) {
-    console.error('Erro ao recuperar dados do item', error);
-    res.status(500).send('Erro ao recuperar dados do item');
-  }
+  // Insira os dados no banco de dados
+  await executeQuery('UPDATE pn SET title = ?, studio = ?, atriz = ?, cover = ?, midia = ?, tags = ?, ativo = ? WHERE id = ?', [title, studio, atriz, cover, midia, formattedTags, ativo, id]);
+      // Enviar resposta ao cliente
+      res.send('<script>alert("Imagens enviadas com sucesso!"); window.location.href = "/adm";</script>');
 });
 
   module.exports = router;

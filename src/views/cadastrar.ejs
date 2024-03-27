@@ -13,8 +13,11 @@
                             <input type="text" id="title" name="title" required><br><br>
 
                             <label for="studio">Studio:</label>
-                            <input type="text" id="studio" name="studio" required><br><br>
-        
+                            <input type="text" id="studio" name="studio" list="studiosList">
+                            <datalist id="studiosList">
+                                <!-- Lista de sugestões inicial -->
+                            </datalist><br><br>
+
                             <label for="atriz">Atriz:</label>
                             <input type="text" id="atriz" name="atriz" required><br><br>
         
@@ -48,8 +51,53 @@
     </footer>
 </div>
 <div id="show-aside-square" onclick="toggleAside()">☰</div>
-<script src="/script/script.js">
 
+<script>
+    const studioInput = document.getElementById('studio');
+    const studiosList = document.getElementById('studiosList');
+
+    let termoPesquisa = '';
+
+    studioInput.addEventListener('input', async () => {
+        termoPesquisa = studioInput.value;
+        const response = await fetch(`/autocompletar?studio=${termoPesquisa}`);
+        const suggestions = await response.json();
+
+        // Limpar sugestões existentes
+        studiosList.innerHTML = '';
+
+        // Adicionar sugestões ao datalist
+        suggestions.forEach(suggestion => {
+            const option = document.createElement('option');
+            option.value = suggestion.studio;
+            studiosList.appendChild(option);
+        });
+    });
+
+    studioInput.addEventListener('keydown', async (event) => {
+        if (event.key === ',') {
+            const termos = termoPesquisa.split(',').map(termo => termo.trim());
+            const ultimoTermo = termos.pop();
+            
+            if (ultimoTermo.trim() !== '') {
+                const response = await fetch(`/autocompletar?studio=${ultimoTermo}`);
+                const suggestions = await response.json();
+
+                // Limpar sugestões existentes
+                studiosList.innerHTML = '';
+
+                // Adicionar sugestões ao datalist
+                suggestions.forEach(suggestion => {
+                    const option = document.createElement('option');
+                    option.value = suggestion.studio;
+                    studiosList.appendChild(option);
+                });
+            }
+        }
+    });
 </script>
+
+
+
 </body>
 </html>
