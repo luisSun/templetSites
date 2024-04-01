@@ -34,8 +34,10 @@ router.get('/main/tags/:id', async (req, res) => {
 
     const totalItems = await executeQuery(`SELECT COUNT(*) AS total FROM pn WHERE FIND_IN_SET(?, tags) AND ativo = "A"ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`, [itemId]);
     const totalPages = Math.ceil(totalItems[0].total / limit);
+    
 
     const selectedItem = await executeQuery(`SELECT * FROM pn WHERE FIND_IN_SET(?, tags) AND ativo = "A"ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`, [itemId]);
+    console.log(selectedItem)
 
     if (!selectedItem || selectedItem.length === 0) {
       throw new Error('Nenhum item encontrado para o ID fornecido.');

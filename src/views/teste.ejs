@@ -41,7 +41,13 @@
                                         <ul class="tag-list">
                                             <li><i class="fa fa-archive" aria-hidden="true"></i> Tags:</li>
                                             <% tagsArray.forEach(tag => { %>
-                                                <li><a href="/main/tags/<%= tag %>" class="tag-button fa fa-tag"> <%= tag %></a></li>
+                                                <% const trimmedTag = tag.trim(); %>
+                                                <% if (trimmedTag !== '') { %>
+                                                    <% const words = trimmedTag.split(' '); %>
+                                                    <% const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)); %>
+                                                    <% const capitalizedTag = capitalizedWords.join(' '); %>
+                                                    <li><a href="/main/tags/<%= capitalizedTag %>" class="tag-button fa fa-tag"><%= capitalizedTag %></a></li>
+                                                <% } %>
                                             <% }); %>
                                         </ul>
                                     </ul>
