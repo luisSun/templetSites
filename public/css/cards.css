@@ -1,7 +1,7 @@
 /* Estilos para os cards */
 .card {
-    width: 323px; /* Card ocupa 45% da largura do contêiner para 2 por linha */
-    height: 309px;
+    width: 360px; /* Card ocupa 45% da largura do contêiner para 2 por linha */
+    height: 320px;
     margin: 1%; /* Margem entre os cards */
     float: left; /* Flutua os cards para a esquerda */
     box-sizing: border-box; /* Inclui padding e borda na largura e altura */
@@ -16,8 +16,8 @@
 }
 
 .card-img {
-    width: 322px; /* Card ocupa 45% da largura do contêiner para 2 por linha */
-    height: 195px;
+    width: 360px; /* Card ocupa 45% da largura do contêiner para 2 por linha */
+    height: 218px;
     justify-content: center;
     position: relative;
     margin: 0px;
@@ -35,7 +35,7 @@
     height: 30px;
     background: linear-gradient(to right, #ec7a21 50%, #d45302 100%);
     z-index: 9998;
-    color: antiquewhite;
+    color: rgb(255, 255, 255);
     display: inline-block; /* Permite ajustar a largura com base no conteúdo */
     padding-left: 10px; /* Espaçamento interno de 10px no topo e na base, e 20px nos lados */
     padding-right: 10px;
