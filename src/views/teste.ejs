@@ -39,7 +39,7 @@
                                         <li><i class="fas fa-video"></i> Studio: <a href="/main/studios/<%= selectedItem.studio %>"><%= selectedItem.studio %></a></li>
         
                                         <ul class="tag-list">
-                                            <li><i class="fa fa-archive" aria-hidden="true"></i> Tags:</li>
+                                            <li><i class="fa fa-archive" id="tags" aria-hidden="true"></i> Tags:</li>
                                             <% tagsArray.forEach(tag => { %>
                                                 <% const trimmedTag = tag.trim(); %>
                                                 <% if (trimmedTag !== '') { %>
@@ -66,7 +66,5 @@
         <p>Footer</p>
     </footer>
 </div>
-<%- include('partials/body_end.ejs') %>
-<script>
 
-</script>
+ <%- include('partials/body_end.ejs') %>

@@ -18,7 +18,7 @@
                 <% for (let i = 0; i < selectedItemA.length; i++) { %>
                     
                     <li>
-                        <a href="/watch/<%= selectedItemA[i].id %>"><%= selectedItemA[i].title %></a>
+                        <a href="/watch/<%= selectedItemA[i].id %>">ID:<%= selectedItemA[i].id %> - <%= selectedItemA[i].title %></a>
                         <span style="float:right;">
                             <button onclick="mostrar('<%= selectedItemA[i].id %>')">mostrar</button>
                             <button onclick="editar(`<%= selectedItemA[i].id %>`)">Editar</button>
@@ -41,17 +41,28 @@
                                 <input type="text" name="studio" value="<%= selectedItemA[i].studio %>" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="tags">Tags</label>
-                                <textarea name="tags" class="form-control"><%= selectedItemA[i].tags %></textarea>
+                                <label for="tags">Tags:</label>
+                                <input type="text" id="tag" name="tags" value="<%= selectedItemA[i].tags %>" required><br><br>
                             </div>
                             <div class="form-group">
                                 <label for="cover">Capa</label>
                                 <input type="text" name="cover" value="<%= selectedItemA[i].cover %>" class="form-control">
                             </div>
+
                             <div class="form-group">
                                 <label for="midia">Midia</label>
                                 <input type="text" name="midia" value="<%= selectedItemA[i].midia %>" class="form-control">
                             </div>
+
+                            <div class="form-group">
+                                <label for="ativo">Tipo Midia:</label>
+                                <select name="ativo" id="ativo" class="form-control">
+                                        <option value="a" <%= selectedItemA[i].ativo.toLowerCase() === 'a' ? 'selected' : '' %>>ATIVO</option>
+                                        <option value="i" <%= selectedItemA[i].ativo.toLowerCase() === 'i' ? 'selected' : '' %>>INATIVO</option>
+                                        <option value="m" <%= selectedItemA[i].ativo.toLowerCase() === 'm' ? 'selected' : '' %>>MODERACAO</option>
+                                    </select>
+                            </div>
+
                             <div class="form-group">
                                 <label for="ativo">Ativo:</label>
                                 <select name="ativo" id="ativo" class="form-control">
@@ -138,6 +149,45 @@ function filterRecords(ativo) {
             item.style.display = 'none';
         }
     });
+}
+
+var uniqueTags = JSON.parse('<%- JSON.stringify(uniqueTags) %>');
+
+function split(val) {
+    return val.split(/,\s*/);
+}
+function extractLast(term) {
+    return split(term).pop();
+}
+$(function() {
+    $("#tag")
+        .on("keydown", function(event) {
+            if (event.keyCode === $.ui.keyCode.TAB &&
+                $(this).autocomplete("instance").menu.active) {
+                event.preventDefault();
+            }
+        })
+        .autocomplete({
+            minLength: 0,
+            source: function(request, response) {
+                response($.ui.autocomplete.filter(
+                    uniqueTags, extractLast(request.term)));
+            },
+            focus: function() {
+                return false;
+            },
+            select: function(event, ui) {
+                var terms = split(this.value);
+                terms.pop();
+                terms.push(ui.item.value);
+                terms.push("");
+                this.value = terms.join(", ");
+                return false;
+            }
+        });
+});
+function stopPropagation(event) {
+    event.stopPropagation();
 }
 </script>
 </body>
