@@ -15,46 +15,50 @@ router.get(['/adm'], async (req, res) => {
       const totalItems = await executeQuery('SELECT COUNT(*) AS total FROM pn');
       const totalPages = Math.ceil(totalItems[0].total / limit);
 
+      const results = await executeQuery('SELECT DISTINCT tags FROM pn');
+        let allTags = results.map(result => result.tags).join(',').split(/[;,:]/).map(tag => tag.trim()).filter(tag => tag !== '');
+
+        const uniqueTags = Array.from(new Set(allTags));
+        console.log(uniqueTags);
+
       if (!selectedItemA || selectedItemA.length === 0) {
           throw new Error('Nenhum item encontrado para o ID fornecido.');
       }
 
-      res.render('admin', { selectedItemA: selectedItemA, selectedItemI: selectedItemI, page: page, totalPages: totalPages });
+      res.render('admin', { selectedItemA: selectedItemA, selectedItemI: selectedItemI, page: page, totalPages: totalPages, uniqueTags:uniqueTags });
   } catch (error) {
       console.error('Erro ao recuperar dados do item', error);
       res.status(500).send('Erro ao recuperar dados do item');
   }
 });
 
-
 /*
 //Rota para Adicionar novo Conteudo
 //GET
 */
+
 router.get(['/adm/add'], async (req, res) => {
     try {
-        // Assuming selectedItem is defined elsewhere
-        res.render('cadastrar');
+        const results = await executeQuery('SELECT DISTINCT tags FROM pn');
+        let allTags = results.map(result => result.tags).join(',').split(/[;,:]/).map(tag => tag.trim()).filter(tag => tag !== '');
+
+        const uniqueTags = Array.from(new Set(allTags));
+
+        const resultStudio = await executeQuery('SELECT DISTINCT studio FROM pn');
+
+        
+        const uniqueStudios = resultStudio.map(item => item.studio); // Extract 'studio' property
+        console.log(uniqueStudios);
+
+        res.status(200).render('cadastrar', {uniqueTags: uniqueTags, uniqueStudios:uniqueStudios});
+        
     } catch (error) {
         console.error('Erro ao recuperar dados do item', error);
         res.status(500).send('Erro ao recuperar dados do item');
     }
 });
 
-router.get('/autocompletar', async (req, res) => {
-    const studio = req.query.studio;
-    const termos = studio.split(',').map(termo => termo.trim());
-    const ultimoTermo = termos.pop();
-    const query = 'SELECT DISTINCT studio FROM pn WHERE studio LIKE ? LIMIT 5';
-    try {
-        const results = await executeQuery(query, [`%${ultimoTermo}%`]);
-        console.log(results)
-        res.json(results);
-    } catch (error) {
-        console.error('Erro ao buscar dados para autocompletar', error);
-        res.status(500).json({ error: 'Erro ao buscar dados para autocompletar' });
-    }
-});
+
 
 
 /*
@@ -112,5 +116,6 @@ router.post(['/adm/editar'], async (req, res) => {
       // Enviar resposta ao cliente
       res.send('<script>alert("Imagens enviadas com sucesso!"); window.location.href = "/adm";</script>');
 });
+
 
   module.exports = router;
