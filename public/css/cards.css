@@ -77,6 +77,8 @@
     list-style-type: none; /* Remove a bolinha padrão */
     font-weight: lighter;
     padding-left: 5px;
+    color: white;
+    font-size: 15px;
 }
 
 /* Estilos para a responsividade (um card por linha em telas menores) */

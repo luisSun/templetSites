@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/css/aside.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/admin-form.css">
+    <link rel="stylesheet" href="/css/nav.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -20,10 +21,6 @@
 </head>
 <body><div class="container">
     <header>
-        <h1>Header</h1>
-        <ul>
-            <a href="/main"><li>Main</li></a>
-            <a href="/adm"><li>Adm</li></a>
-        </ul>
+        <%- include('nav.ejs') %>
     </header>
     <main>

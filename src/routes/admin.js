@@ -16,16 +16,21 @@ router.get(['/adm'], async (req, res) => {
       const totalPages = Math.ceil(totalItems[0].total / limit);
 
       const results = await executeQuery('SELECT DISTINCT tags FROM pn');
-        let allTags = results.map(result => result.tags).join(',').split(/[;,:]/).map(tag => tag.trim()).filter(tag => tag !== '');
+      let allTags = results.map(result => result.tags).join(',').split(/[;,:]/).map(tag => tag.trim()).filter(tag => tag !== '');
+      const uniqueTags = Array.from(new Set(allTags));
 
-        const uniqueTags = Array.from(new Set(allTags));
-        console.log(uniqueTags);
+      const resultStudio = await executeQuery('SELECT DISTINCT studio FROM pn');
+      const uniqueStudios = resultStudio.map(item => item.studio); // Extract 'studio' property
+
+      const resultAtriz = await executeQuery('SELECT DISTINCT atriz FROM pn');
+      const uniqueAtriz = resultAtriz.map(item => item.atriz);
+
 
       if (!selectedItemA || selectedItemA.length === 0) {
           throw new Error('Nenhum item encontrado para o ID fornecido.');
       }
 
-      res.render('admin', { selectedItemA: selectedItemA, selectedItemI: selectedItemI, page: page, totalPages: totalPages, uniqueTags:uniqueTags });
+      res.render('admin', { selectedItemA: selectedItemA, selectedItemI: selectedItemI, page: page, totalPages: totalPages, uniqueTags:uniqueTags, uniqueStudios:uniqueStudios, uniqueAtriz:uniqueAtriz });
   } catch (error) {
       console.error('Erro ao recuperar dados do item', error);
       res.status(500).send('Erro ao recuperar dados do item');
@@ -41,16 +46,15 @@ router.get(['/adm/add'], async (req, res) => {
     try {
         const results = await executeQuery('SELECT DISTINCT tags FROM pn');
         let allTags = results.map(result => result.tags).join(',').split(/[;,:]/).map(tag => tag.trim()).filter(tag => tag !== '');
-
         const uniqueTags = Array.from(new Set(allTags));
 
         const resultStudio = await executeQuery('SELECT DISTINCT studio FROM pn');
-
-        
         const uniqueStudios = resultStudio.map(item => item.studio); // Extract 'studio' property
-        console.log(uniqueStudios);
 
-        res.status(200).render('cadastrar', {uniqueTags: uniqueTags, uniqueStudios:uniqueStudios});
+        const resultAtriz = await executeQuery('SELECT DISTINCT atriz FROM pn');
+        const uniqueAtriz = resultAtriz.map(item => item.atriz);
+
+        res.status(200).render('cadastrar', {uniqueTags: uniqueTags, uniqueStudios:uniqueStudios, uniqueAtriz: uniqueAtriz});
         
     } catch (error) {
         console.error('Erro ao recuperar dados do item', error);
@@ -67,7 +71,7 @@ router.get(['/adm/add'], async (req, res) => {
 */
 
 router.post('/add', async (req, res) => {
-  console.log(req.body)
+  //console.log(req.body)
   try {
       const { title, studio, atriz, capa, midia, tipoMidia, tags, ativo } = req.body;
       const midiac = midia + '.' + tipoMidia;
@@ -75,15 +79,36 @@ router.post('/add', async (req, res) => {
       const formattedTags = tags.split(',').map(tag => {
         // Remover espaços em branco antes e depois da tag
         tag = tag.trim();
-    
+
         // Converter a primeira letra de cada palavra para maiúscula
         tag = tag.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
     
         return tag;
     }).filter(tag => tag !== '').join(', ');
+
+    const formattedatriz = atriz.split(',').map(name => {
+      // Remover espaços em branco antes e depois do nome
+      name = name.trim();
+  
+      // Converter a primeira letra de cada palavra para maiúscula
+      name = name.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+  
+      return name;
+      }).filter(name => name !== '').join(',');
+
+      const formattedStudio = studio.split(',').map(name => {
+        // Remover espaços em branco antes e depois do nome
+        name = name.trim();
+    
+        // Converter a primeira letra de cada palavra para maiúscula
+        name = name.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+    
+        return name;
+        }).filter(name => name !== '').join(',');
+        console.log(formattedStudio)
   
       // Insira os dados no banco de dados
-      await executeQuery('INSERT INTO pn (title, studio, atriz, cover, midia, tags, ativo) VALUES (?, ?, ?, ?, ?, ?, ?)', [title, studio, atriz, capa, midiac, formattedTags, ativo]);
+      await executeQuery('INSERT INTO pn (title, studio, atriz, cover, midia, tags, ativo) VALUES (?, ?, ?, ?, ?, ?, ?)', [title, formattedStudio, formattedatriz, capa, midiac, formattedTags, ativo]);
       
       res.redirect('/'); // Redireciona para a página principal após adicionar o item
   } catch (error) {
@@ -98,18 +123,19 @@ router.post('/add', async (req, res) => {
 */
 
 router.post(['/adm/editar'], async (req, res) => {
-  const { id, title, atriz, studio, tags, cover, midia, ativo } = req.body;
-  console.log(title, atriz, studio, tags, midia, ativo)
+  const { id, title, atriz, studio, tags, cover, midia, tmidia, ativo } = req.body;
   const formattedTags = tags.split(',').map(tag => {
     // Remover espaços em branco antes e depois da tag
     tag = tag.trim();
-
-    // Converter a primeira letra de cada palavra para maiúscula
-    tag = tag.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-
+    
+    // Remover todos os espaços em branco da tag
+    tag = tag.replace(/\s+/g, '');
+  
+    // Converter a primeira letra de cada palavra para minúscula
+    tag = tag.toLowerCase();
+    
     return tag;
-}).filter(tag => tag !== '').join(', ');
-
+  }).filter(tag => tag !== '').join(',');
 
   // Insira os dados no banco de dados
   await executeQuery('UPDATE pn SET title = ?, studio = ?, atriz = ?, cover = ?, midia = ?, tags = ?, ativo = ? WHERE id = ?', [title, studio, atriz, cover, midia, formattedTags, ativo, id]);
@@ -117,5 +143,26 @@ router.post(['/adm/editar'], async (req, res) => {
       res.send('<script>alert("Imagens enviadas com sucesso!"); window.location.href = "/adm";</script>');
 });
 
+router.post(['/adm/editartag'], async (req, res) => {
+  const { id, tags } = req.body;
+  const formattedTags = tags.split(',').map(tag => {
+    // Remover espaços em branco antes e depois da tag
+    tag = tag.trim();
+    
+    // Remover todos os espaços em branco da tag
+    tag = tag.replace(/\s+/g, '');
+  
+    // Converter a primeira letra de cada palavra para minúscula
+    tag = tag.toLowerCase();
+    
+    return tag;
+  }).filter(tag => tag !== '').join(',');
 
-  module.exports = router;
+  // Insira os dados no banco de dados
+  await executeQuery('UPDATE pn SET tags = ? WHERE id = ?', [formattedTags, id]);
+      // Enviar resposta ao cliente
+      res.send('<script>alert("Imagens enviadas com sucesso!"); window.location.href = "/adm";</script>');
+});
+
+
+module.exports = router;

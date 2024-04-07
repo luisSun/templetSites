@@ -1,0 +1,30 @@
+<%- include('partials/head.ejs') %>
+<%- include('partials/aside.ejs') %>
+        <section id="main-content">
+            <div class="main">
+                <div class="article">
+                    <div class="article-header">
+                        <h3>Cabeçalho artigo New HD videos</h3>
+                    </div>
+                    <div class="article-body" id="card-container" style="color:white;">
+                        <% uniqueTags.sort().forEach(tag => { %>
+                            <ul>
+                                <li><%= tag %></li>
+                            </ul>
+                        <% }); %>
+                    
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="pag">
+    </footer>
+</div>
+<div id="show-aside-square" onclick="toggleAside()">☰</div>
+<script src="/script/script.js">
+
+</script>
+</body>
+</html>
