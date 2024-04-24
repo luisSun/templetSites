@@ -1,13 +1,17 @@
-var uniqueTags = JSON.parse('<%- JSON.stringify(uniqueTags) %>');
 
+// Function to split input value
 function split(val) {
     return val.split(/,\s*/);
 }
+
+// Function to extract last term
 function extractLast(term) {
     return split(term).pop();
 }
-$(function() {
-    $("#tags")
+
+// Autocomplete function
+function setupAutocomplete(inputId, uniqueData) {
+    $(inputId)
         .on("keydown", function(event) {
             if (event.keyCode === $.ui.keyCode.TAB &&
                 $(this).autocomplete("instance").menu.active) {
@@ -18,7 +22,7 @@ $(function() {
             minLength: 0,
             source: function(request, response) {
                 response($.ui.autocomplete.filter(
-                    uniqueTags, extractLast(request.term)));
+                    uniqueData, extractLast(request.term)));
             },
             focus: function() {
                 return false;
@@ -32,7 +36,19 @@ $(function() {
                 return false;
             }
         });
+}
+
+$(function() {
+    // Setup autocomplete for #tags input
+    setupAutocomplete("#tags", JSON.parse('<%- JSON.stringify(uniqueTags) %>'));
+
+    // Setup autocomplete for #studio input
+    setupAutocomplete("#studio", JSON.parse('<%- JSON.stringify(uniqueStudios) %>'));
+
+    // Setup autocomplete for #atriz input
+    setupAutocomplete("#atriz", JSON.parse('<%- JSON.stringify(uniqueAtriz) %>'));
 });
+
 function stopPropagation(event) {
     event.stopPropagation();
 }

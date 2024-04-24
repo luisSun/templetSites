@@ -31,25 +31,43 @@
                                         <li><i class="fas fa-tachometer-alt"></i> Duration: 00:27:47</li>
 
                                         <li>
-                                            <i class="ftags-capt fa fa-star"></i> Star:
-                                            <% atrizArray.forEach((atriz, index) => { %>
-                                                <% if (index > 0) { %>, <% } %><a href="/main/atriz/<%= atriz %>"><%= atriz %></a>
+                                            <i class="fas fa-video"></i> Studio:
+                                            <% studioArray.forEach((studio, index) => { %>
+                                                <% if (index > 0) { %>,<% } %><a href="/main/studios/<%= studio %>"><%= studio %></a>
                                             <% }); %>
                                         </li>
-                                        <li><i class="fas fa-video"></i> Studio: <a href="/main/studios/<%= selectedItem.studio %>"><%= selectedItem.studio %></a></li>
+
+                                        <li>
+                                            <i class="ftags-capt fa fa-star"></i> Star:
+                                            <% atrizArray.forEach((atriz, index) => { %>
+                                                <% if (index > 0) { %>,<% } %><a href="/main/atriz/<%= atriz %>"><%= atriz %></a>
+                                            <% }); %>
+                                        </li>
         
                                         <ul class="tag-list">
-                                            <li><i class="fa fa-archive" id="tags" aria-hidden="true"></i> Tags:</li>
-                                            <% tagsArray.forEach(tag => { %>
-                                                <% const trimmedTag = tag.trim(); %>
-                                                <% if (trimmedTag !== '') { %>
-                                                    <% const words = trimmedTag.split(' '); %>
-                                                    <% const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)); %>
-                                                    <% const capitalizedTag = capitalizedWords.join(' '); %>
-                                                    <li><a href="/main/tags/<%= capitalizedTag %>" class="tag-button fa fa-tag"><%= capitalizedTag %></a></li>
-                                                <% } %>
+                                            <li><i class="fa fa-archive" aria-hidden="true"></i> Tags:</li>
+                                            <% 
+                                            // Crie um array de tags formatadas e as ordene em ordem alfabética
+                                            const formattedTags = tagsArray
+                                                .map(tag => tag.trim()) // Remova espaços em branco
+                                                .filter(tag => tag !== '') // Remova tags vazias
+                                                .map(tag => tag.charAt(0).toUpperCase() + tag.slice(1)) // Capitalize a primeira letra de cada tag
+                                                .sort(); // Ordene as tags em ordem alfabética
+                                        
+                                            formattedTags.forEach(tag => { %>
+                                                <li><a href="/main/tags/<%= tag %>" class="tag-button fa fa-tag"><%= tag %></a></li>
                                             <% }); %>
                                         </ul>
+                                        
+                                        <button id="showTagsButton" onclick="toggleTagsForm()">Editar Tags</button>
+                                        <form id="editTagsForm" action="/adm/editartag" method="post" style="display: none;">
+                                            <input type="hidden" id="itemId" name="id" value="<%= selectedItem.id %>">
+                                            <div id="tagsContainer">
+                                              <input type="text" id="tags" name="tags" value="<%= selectedItem.tags %>" required><br><br>
+                                              <button type="submit">Enviar</button>
+                                            </div>
+                                        </form>
+
                                     </ul>
                                 </div>
                                 <div class="recomendacoes">
@@ -66,5 +84,73 @@
         <p>Footer</p>
     </footer>
 </div>
+
+<script>
+function toggleTagsForm() {
+    var form = document.getElementById('editTagsForm');
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
+    } else {
+        form.style.display = 'none';
+    }
+}
+
+// Function to split input value
+function split(val) {
+    return val.split(/,\s*/);
+}
+
+// Function to extract last term
+function extractLast(term) {
+    var terms = split(term);
+    return terms[terms.length - 1];
+}
+// Autocomplete function
+function setupAutocomplete(inputId, uniqueData) {
+    $(inputId)
+        .on("keydown", function(event) {
+            if (event.keyCode === $.ui.keyCode.TAB &&
+                $(this).autocomplete("instance").menu.active) {
+                event.preventDefault();
+            }
+        })
+        .autocomplete({
+            minLength: 0,
+            source: function(request, response) {
+                var results = $.ui.autocomplete.filter(
+                    uniqueData, extractLast(request.term));
+                response(results.slice(0, 5)); // Limit to 5 suggestions
+            },
+            focus: function() {
+                return false;
+            },
+            select: function(event, ui) {
+                var terms = split(this.value);
+                terms.pop();
+                terms.push(ui.item.value);
+                terms.push("");
+                this.value = terms.join(", ");
+                return false;
+            }
+        }).autocomplete("instance")._renderItem = function(ul, item) {
+            return $("<li>")
+                .append("<div>" + item.label + "</div>")
+                .appendTo(ul);
+        };
+}
+
+$(function() {
+    // Setup autocomplete for #tags input
+    setupAutocomplete("#tags", JSON.parse('<%- JSON.stringify(uniqueTags) %>'));
+
+    // Setup autocomplete for #studio input
+    //setupAutocomplete("#studio", JSON.parse('<%- JSON.stringify(uniqueStudios) %>'));
+
+    // Setup autocomplete for #atriz input
+    //setupAutocomplete("#atriz", JSON.parse('<%- JSON.stringify(uniqueAtriz) %>'));
+});
+
+
+</script>
 
  <%- include('partials/body_end.ejs') %>

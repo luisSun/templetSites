@@ -1,0 +1,27 @@
+.gallery-main {
+    display: flex;
+    flex-wrap: wrap; /* Items wrap to the next line if there's not enough space */
+    justify-content: space-between; /* Items are evenly distributed with space between them */
+    align-items: flex-start; /* Items are aligned to the start of the cross axis */
+    width: 800px; /* Largura total dos cards */
+    margin: 0 auto; /* Centraliza o contêiner */
+}
+
+.gallery-img {
+    width: calc(25% - 5px); /* Largura do card (20% - 5px de margem) */
+    height: 160px;
+    margin-right: 5px;
+    margin-bottom: 5px; /* Espaço entre as linhas */
+    box-sizing: border-box; /* Inclui a borda e o padding na largura */
+    overflow: hidden; /* Oculta conteúdo que estoura os limites do card */
+    position: relative; /* Permite posicionar elementos filhos relativamente */
+}
+
+.gallery-img img {
+    width: 100%; /* Imagem ocupa toda a largura do card */
+    height: auto; /* Altura automática para manter a proporção */
+}
+
+.gallery-img:last-child {
+    margin-left: 0; /* Remove a margem direita do último card */
+}
