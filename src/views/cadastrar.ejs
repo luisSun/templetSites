@@ -13,9 +13,11 @@
                             <input type="text" id="title" name="title" required><br><br>
 
                             <label for="studio">Studio:</label>
-                            <input type="text" id="studio" name="studio" required><br><br>
+                            <input type="text" id="studio" name="studio" list="studiosList">
+                            <datalist id="studiosList">
+                            </datalist><br><br>
 
-                            <label for="atriz">Atrizes:</label>
+                            <label for="atriz">Atriz:</label>
                             <input type="text" id="atriz" name="atriz" required><br><br>
         
                             <label for="capa">Capa:</label>
@@ -49,62 +51,76 @@
 </div>
 
 <script>
+    var uniqueTags = JSON.parse('<%- JSON.stringify(uniqueTags) %>');
 
-// Function to split input value
-function split(val) {
-    return val.split(/,\s*/);
-}
+    function split(val) {
+        return val.split(/,\s*/);
+    }
+    function extractLast(term) {
+        return split(term).pop();
+    }
+    $(function() {
+        $("#tags")
+            .on("keydown", function(event) {
+                if (event.keyCode === $.ui.keyCode.TAB &&
+                    $(this).autocomplete("instance").menu.active) {
+                    event.preventDefault();
+                }
+            })
+            .autocomplete({
+                minLength: 0,
+                source: function(request, response) {
+                    var filteredTags = $.ui.autocomplete.filter(uniqueTags, extractLast(request.term));
+                    response(filteredTags.slice(0, 5));
+                },
+                focus: function() {
+                    return false;
+                },
+                select: function(event, ui) {
+                    var terms = split(this.value);
+                    terms.pop();
+                    terms.push(ui.item.value);
+                    terms.push("");
+                    this.value = terms.join(", ");
+                    return false;
+                }
+            });
+    });
 
-// Function to extract last term
-function extractLast(term) {
-    var terms = split(term);
-    return terms[terms.length - 1];
-}
-// Autocomplete function
-function setupAutocomplete(inputId, uniqueData) {
-    $(inputId)
-        .on("keydown", function(event) {
-            if (event.keyCode === $.ui.keyCode.TAB &&
-                $(this).autocomplete("instance").menu.active) {
-                event.preventDefault();
-            }
-        })
-        .autocomplete({
-            minLength: 0,
-            source: function(request, response) {
-                var results = $.ui.autocomplete.filter(
-                    uniqueData, extractLast(request.term));
-                response(results.slice(0, 5)); // Limit to 5 suggestions
-            },
-            focus: function() {
-                return false;
-            },
-            select: function(event, ui) {
-                var terms = split(this.value);
-                terms.pop();
-                terms.push(ui.item.value);
-                terms.push("");
-                this.value = terms.join(", ");
-                return false;
-            }
-        }).autocomplete("instance")._renderItem = function(ul, item) {
-            return $("<li>")
-                .append("<div>" + item.label + "</div>")
-                .appendTo(ul);
-        };
-}
+    var uniqueStudios = JSON.parse('<%- JSON.stringify(uniqueStudios) %>');
 
-$(function() {
-    // Setup autocomplete for #tags input
-    setupAutocomplete("#tags", JSON.parse('<%- JSON.stringify(uniqueTags) %>'));
+    $(function() {
+        $("#studio")
+            .on("keydown", function(event) {
+                if (event.keyCode === $.ui.keyCode.TAB &&
+                    $(this).autocomplete("instance").menu.active) {
+                    event.preventDefault();
+                }
+            })
+            .autocomplete({
+                minLength: 0,
+                source: function(request, response) {
+                    var filteredStudios = $.ui.autocomplete.filter(uniqueStudios, extractLast(request.term));
+                    response(filteredStudios.slice(0, 5));
+                },
+                focus: function() {
+                    return false;
+                },
+                select: function(event, ui) {
+                    var terms = split(this.value);
+                    terms.pop();
+                    terms.push(ui.item.value);
+                    terms.push("");
+                    this.value = terms.join(", ");
+                    return false;
+                }
+            });
+    });
 
-    // Setup autocomplete for #studio input
-    setupAutocomplete("#studio", JSON.parse('<%- JSON.stringify(uniqueStudios) %>'));
-
-    // Setup autocomplete for #atriz input
-    setupAutocomplete("#atriz", JSON.parse('<%- JSON.stringify(uniqueAtriz) %>'));
-});
-
+    function stopPropagation(event) {
+        event.stopPropagation();
+    }
 </script>
+
 </body>
 </html>

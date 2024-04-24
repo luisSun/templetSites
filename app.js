@@ -7,7 +7,7 @@ const app = express();
 const homeRouter = require('./src/routes/homeRoute');
 const admRouter = require('./src/routes/admin.js');
 
-const PORT = process.env.PORT || 8084;
+const PORT = process.env.PORT || 8079;
 
 const middleware = require('./src/middleware/middleware.js');
 

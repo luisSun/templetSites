@@ -166,4 +166,23 @@ router.get('/main/studios/:id', async (req, res) => {
 });
 
 
+router.get(['/gal'], async (req, res) => {
+  try {
+    res.render('galerias');
+  } catch (error) {
+    console.error('Erro ao recuperar dados do item', error);
+    res.status(500).send('Erro ao recuperar dados do item');
+  }
+});
+
+router.get(['/gal2'], async (req, res) => {
+  try {
+    res.render('galerias');
+  } catch (error) {
+    console.error('Erro ao recuperar dados do item', error);
+    res.status(500).send('Erro ao recuperar dados do item');
+  }
+});
+
+
 module.exports = router;
