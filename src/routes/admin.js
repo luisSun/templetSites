@@ -22,6 +22,10 @@ router.get(['/adm'], async (req, res) => {
       const resultStudio = await executeQuery('SELECT DISTINCT studio FROM pn');
       const uniqueStudios = resultStudio.map(item => item.studio); // Extract 'studio' property
 
+      const resultTitle = await executeQuery('SELECT DISTINCT title FROM pn');
+      const uniqresultTitle = resultTitle.map(item => item.title); // Extract 'studio' property
+      //console.log(uniqresultTitle)
+
       const resultAtriz = await executeQuery('SELECT DISTINCT atriz FROM pn');
       const uniqueAtriz = resultAtriz.map(item => item.atriz);
 
@@ -30,7 +34,7 @@ router.get(['/adm'], async (req, res) => {
           throw new Error('Nenhum item encontrado para o ID fornecido.');
       }
 
-      res.render('admin', { selectedItemA: selectedItemA, selectedItemI: selectedItemI, page: page, totalPages: totalPages, uniqueTags:uniqueTags, uniqueStudios:uniqueStudios, uniqueAtriz:uniqueAtriz });
+      res.render('editarcad', { selectedItemA: selectedItemA, selectedItemI: selectedItemI, page: page, totalPages: totalPages, uniqueTags:uniqueTags, uniqueStudios:uniqueStudios, uniqueAtriz:uniqueAtriz, uniqresultTitle:uniqresultTitle });
   } catch (error) {
       console.error('Erro ao recuperar dados do item', error);
       res.status(500).send('Erro ao recuperar dados do item');
@@ -159,7 +163,7 @@ router.post(['/adm/editartag'], async (req, res) => {
   }).filter(tag => tag !== '').join(',');
 
   // Insira os dados no banco de dados
-  await executeQuery('UPDATE pn SET tags = ? WHERE id = ?', [formattedTags, id]);
+      await executeQuery('UPDATE pn SET tags = ? WHERE id = ?', [formattedTags, id]);
       // Enviar resposta ao cliente
       res.send('<script>alert("Imagens enviadas com sucesso!"); window.location.href = "/adm";</script>');
 });

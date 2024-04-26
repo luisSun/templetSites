@@ -1,0 +1,129 @@
+<%- include('partials/head.ejs') %>
+<%- include('partials/aside_adm.ejs') %>
+<section id="main-content">
+  <div class="main">
+    <div class="article">
+      <div class="article-header">
+        <h3>Admin</h3>
+      </div>
+      <div class="article-body" id="card-container">
+        <div class="ativosmeme" style="background-color: white;">
+            
+            <button onclick="filterRecords('A')">ATIVO</button>
+            <button onclick="filterRecords('I')">INATIVO</button>
+            <button onclick="filterRecords('M')">MODERACAO</button>
+            <button onclick="filterRecords('ALL')">TODOS</button>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search...">
+                <button onclick="searchRecords()">Search</button>
+              </div>
+            <ul class="cadeditar" id="content">
+
+
+                
+                <% for (let i = 0; i < selectedItemA.length; i++) { %>
+
+                    
+                    <li>
+                        <a href="/watch/<%= selectedItemA[i].id %>">
+                            ID:<%= selectedItemA[i].id %> - <%= selectedItemA[i].title %>
+                        </a>
+                        <span style="float:right;">
+                            <button onclick="mostrar('<%= selectedItemA[i].id %>')">mostrar</button>
+                            <button id="button-<%= selectedItemA[i].id %>" onclick="toggleForm('<%= selectedItemA[i].id %>')">Editar</button>
+                        </span>
+                        <div style="clear:both;"></div>
+                        <!-- Formulário de edição -->
+                        <form id="form-<%= selectedItemA[i].id %>" class="modern-form" style="display:none;" action="/adm/editar" method="POST">
+                            <!-- Campos do formulário -->
+                            <div class="form-group">
+                                <input type="hidden" name="id" value="<%= selectedItemA[i].id %>">
+                                <label for="title">Title</label>
+                                <input type="text" name="title" value="<%= selectedItemA[i].title %>" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="atriz">Atriz</label>
+                                <input type="text" name="atriz" value="<%= selectedItemA[i].atriz %>" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="studio">Studio</label>
+                                <input type="text" name="studio" value="<%= selectedItemA[i].studio %>" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="tags">Tags:</label>
+                                <input type="text" id="tag" name="tags" value="<%= selectedItemA[i].tags %>" required><br><br>
+                            </div>
+                            <div class="form-group">
+                                <label for="cover">Capa</label>
+                                <input type="text" name="cover" value="<%= selectedItemA[i].cover %>" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="midia">Midia</label>
+                                <input type="text" name="midia" value="<%= selectedItemA[i].midia %>" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="ativo">Tipo Midia:</label>
+                                <select name="ativo" class="form-control">
+                                    <option value="a" <%= selectedItemA[i].ativo.toLowerCase() === 'a' ? 'selected' : '' %>>ATIVO</option>
+                                    <option value="i" <%= selectedItemA[i].ativo.toLowerCase() === 'i' ? 'selected' : '' %>>INATIVO</option>
+                                    <option value="m" <%= selectedItemA[i].ativo.toLowerCase() === 'm' ? 'selected' : '' %>>MODERACAO</option>
+                                </select>
+                            </div>
+                            <!-- Um campo de botão para enviar o formulário -->
+                            <button type="submit" class="btn btn-orange">Salvar</button>
+                            
+                        </form>
+                        
+                    </li>
+                    <br>
+                    <% } %>              
+                </ul>
+                <footer class="pag">
+                    <div class="pagination">
+                        <% if (page > 3) { %>
+                            <a href="/adm?page=1">Primeira</a>
+                            <a href="/adm?page=<%= page - 1 %>">Anterior</a>
+                        <% } %>
+                        <% if (page > 3) { %>
+                            <span>...</span>
+                        <% } %>
+                        <% for (let i = Math.max(1, page - 2); i <= Math.min(page + 2, totalPages); i++) { %>
+                            <a href="/adm?page=<%= i %>" class="<%= i === page ? 'active' : '' %>"><%= i %></a>
+                        <% } %>
+                        <% if (page < totalPages - 2) { %>
+                            <span>...</span>
+                        <% } %>
+                        <% if (page < totalPages) { %>
+                            <a href="/adm?page=<%= parseInt(page) + 1 %>">Próxima</a>
+                            <a href="/adm?page=<%= totalPages %>">Última</a>
+                        <% } %>
+                    </div>
+                </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="pag">
+</footer>
+</div>
+<div id="show-aside-square" onclick="toggleAside()">☰</div>
+
+<script>
+    function toggleForm(id) {
+        var form = document.getElementById('form-' + id);
+        var button = document.getElementById('button-' + id);
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            button.innerText = 'Ocultar';
+        } else {
+            form.style.display = 'none';
+            button.innerText = 'Editar';
+        }
+    }
+</script>
+
+
+</body>
+</html>
