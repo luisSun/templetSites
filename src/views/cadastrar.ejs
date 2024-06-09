@@ -13,9 +13,7 @@
                             <input type="text" id="title" name="title" required><br><br>
 
                             <label for="studio">Studio:</label>
-                            <input type="text" id="studio" name="studio" list="studiosList">
-                            <datalist id="studiosList">
-                            </datalist><br><br>
+                            <input type="text" id="studio" name="studio" list="studiosList"><br><br>
 
                             <label for="atriz">Atriz:</label>
                             <input type="text" id="atriz" name="atriz" required><br><br>
@@ -27,6 +25,7 @@
                             <input type="text" id="midia" name="midia" required><br><br>
                             <select name="tipoMidia" id="tipoMidia">
                                 <option value="mp4">MP4</option>
+                                <option value="mkv">MKV</option>
                                 <option value="avi">AVI</option>
                                 <option value="wmv">WMV</option>
                             </select><br><br>
@@ -51,7 +50,9 @@
 </div>
 
 <script>
-    var uniqueTags = JSON.parse('<%- JSON.stringify(uniqueTags) %>');
+
+   var uniqueTags = JSON.parse('<%- JSON.stringify(uniqueTags) %>');
+   console.log(uniqueTags)
 
     function split(val) {
         return val.split(/,\s*/);
@@ -115,6 +116,36 @@
                     return false;
                 }
             });
+    });
+
+    var uniqueAtriz = JSON.parse('<%- JSON.stringify(uniqueAtriz) %>');
+
+    $(function() {
+		$("#atriz")
+			.on("keydown", function(event) {
+				if (event.keyCode === $.ui.keyCode.TAB &&
+					$(this).autocomplete("instance").menu.active) {
+					event.preventDefault();
+				}
+			})
+			.autocomplete({
+				minLength: 0,
+				source: function(request, response) {
+					var filteredAtriz = $.ui.autocomplete.filter(uniqueAtriz, extractLast(request.term));
+					response(filteredAtriz.slice(0, 5));
+				},
+				focus: function() {
+					return false;
+				},
+				select: function(event, ui) {
+					var terms = split(this.value);
+					terms.pop();
+					terms.push(ui.item.value);
+					terms.push("");
+					this.value = terms.join(", ");
+					return false;
+				}
+			});
     });
 
     function stopPropagation(event) {
