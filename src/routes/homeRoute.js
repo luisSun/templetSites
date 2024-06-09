@@ -22,8 +22,41 @@ router.get(['/', '/main', '/home'], async (req, res) => {
   }
 });
 
-// TAGS
+router.get('/atrizes/', async (req, res) => {
+  try {
+    const studios = await executeQuery('SELECT DISTINCT studio FROM pn WHERE ativo = "A" ORDER BY studio');
+    
+    const results = await executeQuery('SELECT DISTINCT atriz FROM pn');
+    let allTags = results.map(result => result.atriz).join(',').split(/[;,:]/).map(tag => tag.trim()).filter(tag => tag !== '');
+    const uniqueTags = Array.from(new Set(allTags));
+    //console.log(results)
+    const value = ['atriz']
 
+    res.render('tags', {studios, uniqueTags:uniqueTags, value:value });
+  } catch (error) {
+    console.error('Erro ao recuperar dados do item', error);
+    res.status(500).send('Erro ao recuperar dados do item');
+  }
+});
+
+router.get('/studios', async (req, res) => {
+  try {
+    const studios = await executeQuery('SELECT DISTINCT studio FROM pn WHERE ativo = "A" ORDER BY studio');
+    
+    const results = await executeQuery('SELECT DISTINCT studio FROM pn');
+    let allTags = results.map(result => result.studio).join(',').split(/[;,:]/).map(tag => tag.trim()).filter(tag => tag !== '');
+    const uniqueTags = Array.from(new Set(allTags));
+    console.log(studios)
+    const value = ['studios']
+
+    res.render('tags', {studios, uniqueTags:uniqueTags, value:value });
+  } catch (error) {
+    console.error('Erro ao recuperar dados do item', error);
+    res.status(500).send('Erro ao recuperar dados do item');
+  }
+});
+
+// TAGS
 router.get('/tags/', async (req, res) => {
   try {
     const studios = await executeQuery('SELECT DISTINCT studio FROM pn WHERE ativo = "A" ORDER BY studio');
@@ -32,8 +65,9 @@ router.get('/tags/', async (req, res) => {
     let allTags = results.map(result => result.tags).join(',').split(/[;,:]/).map(tag => tag.trim()).filter(tag => tag !== '');
     const uniqueTags = Array.from(new Set(allTags));
     console.log(uniqueTags)
+    const value = ['tags']
 
-    res.render('tags', {studios, uniqueTags:uniqueTags });
+    res.render('tags', {studios, uniqueTags:uniqueTags, value:value });
   } catch (error) {
     console.error('Erro ao recuperar dados do item', error);
     res.status(500).send('Erro ao recuperar dados do item');
@@ -165,7 +199,7 @@ router.get('/main/studios/:id', async (req, res) => {
   }
 });
 
-
+/*
 router.get(['/gal'], async (req, res) => {
   try {
     res.render('galerias');
@@ -183,6 +217,6 @@ router.get(['/gal2'], async (req, res) => {
     res.status(500).send('Erro ao recuperar dados do item');
   }
 });
-
+*/
 
 module.exports = router;
