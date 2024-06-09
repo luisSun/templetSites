@@ -34,6 +34,16 @@ section {
     font-size: 20px;
 }
 
+.list-info a{
+    text-decoration: none;
+    color:#f9f9f9;
+}
+
+.just-tag{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-decoration: none;
+    color:#f9f9f9;
+}
 
 /* Estilos para o formulário */
 .form-enviar {

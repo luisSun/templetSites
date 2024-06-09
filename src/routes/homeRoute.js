@@ -46,7 +46,7 @@ router.get('/studios', async (req, res) => {
     const results = await executeQuery('SELECT DISTINCT studio FROM pn');
     let allTags = results.map(result => result.studio).join(',').split(/[;,:]/).map(tag => tag.trim()).filter(tag => tag !== '');
     const uniqueTags = Array.from(new Set(allTags));
-    console.log(studios)
+    console.log(uniqueTags)
     const value = ['studios']
 
     res.render('tags', {studios, uniqueTags:uniqueTags, value:value });

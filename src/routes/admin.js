@@ -83,12 +83,15 @@ router.post('/add', async (req, res) => {
       const formattedTags = tags.split(',').map(tag => {
         // Remover espaços em branco antes e depois da tag
         tag = tag.trim();
-
-        // Converter a primeira letra de cada palavra para maiúscula
-        tag = tag.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-    
+        
+        // Remover todos os espaços em branco da tag
+        tag = tag.replace(/\s+/g, '');
+      
+        // Converter a primeira letra de cada palavra para minúscula
+        tag = tag.toLowerCase();
+        
         return tag;
-    }).filter(tag => tag !== '').join(', ');
+      }).filter(tag => tag !== '').join(',');
 
     const formattedatriz = atriz.split(',').map(name => {
       // Remover espaços em branco antes e depois do nome

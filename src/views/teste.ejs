@@ -31,7 +31,7 @@
                                         <li><i class="fas fa-tachometer-alt"></i> Duration: 00:27:47</li>
 
                                         <li>
-                                            <i class="fas fa-video"></i> Studio:
+                                            <i class="fa-solid fa-video"></i> Studio:
                                             <% studioArray.forEach((studio, index) => { %>
                                                 <% if (index > 0) { %>,<% } %><a href="/main/studios/<%= studio %>"><%= studio %></a>
                                             <% }); %>
@@ -52,10 +52,10 @@
                                                 .map(tag => tag.trim()) // Remova espaços em branco
                                                 .filter(tag => tag !== '') // Remova tags vazias
                                                 .map(tag => tag.charAt(0).toUpperCase() + tag.slice(1)) // Capitalize a primeira letra de cada tag
-                                                .sort(); // Ordene as tags em ordem alfabética
+                                                .sort(); // Ordena as tags em ordem alfabética
                                         
                                             formattedTags.forEach(tag => { %>
-                                                <li><a href="/main/tags/<%= tag %>" class="tag-button fa fa-tag"><%= tag %></a></li>
+                                                <li> <a href="/main/tags/<%= tag %>" class="tag-button"><i class="fa fa-tag" aria-hidden="true"></i> <%= tag %></a></li>
                                             <% }); %>
                                         </ul>
                                         
