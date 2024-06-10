@@ -71,3 +71,12 @@ button:hover {
     text-decoration: none;
     font-weight: bold;
 }
+
+.cadeditar a{
+    text-decoration: none;
+}
+
+.cadeditar li{
+    padding: 0px;
+}
+    
