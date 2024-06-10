@@ -147,6 +147,49 @@ router.get('/watch/:id', async (req, res) => {
   }
 });
 
+//Watch Random
+router.get('/random/', async (req, res) => {
+  try {
+      const itemId = req.params.id;
+
+      const selectedItem = await executeQuery(`SELECT * FROM pn WHERE ativo = "A" ORDER BY RAND() LIMIT 1`, [itemId]);
+      //Redireciona para main se der errado a resolução de rota acima
+      if (!selectedItem || selectedItem.length === 0) {
+          return res.redirect('/main');
+      }
+
+      console.log(selectedItem)
+
+      const studios = await executeQuery('SELECT DISTINCT studio FROM pn WHERE ativo = "A" ORDER BY studio');
+      const tagsArray = selectedItem[0].tags.split(',');
+      const atrizArray = selectedItem[0].atriz.split(',');
+      const studioArray = selectedItem[0].studio.split(',');
+
+      const results = await executeQuery('SELECT DISTINCT tags FROM pn');
+      let allTags = results.map(result => result.tags).join(',').split(/[;,:]/).map(tag => tag.trim()).filter(tag => tag !== '');
+      const uniqueTags = Array.from(new Set(allTags));
+
+      const resultStudio = await executeQuery('SELECT DISTINCT studio FROM pn');
+      const uniqueStudios = resultStudio.map(item => item.studio); // Extract 'studio' property
+
+      const resultAtriz = await executeQuery('SELECT DISTINCT atriz FROM pn');
+      const uniqueAtriz = resultAtriz.map(item => item.atriz);
+
+      res.render('teste', { selectedItem: selectedItem[0],
+        tagsArray,
+        studios,
+        atrizArray,
+        uniqueTags:uniqueTags,
+        uniqueAtriz:uniqueAtriz,
+        uniqueStudios:uniqueStudios,
+        studioArray});
+  } catch (error) {
+      console.error('Erro ao recuperar dados do item', error);
+      res.status(500).send('Erro ao recuperar dados do item');
+  }
+});
+
+
 // Rota de pesquisa por Atriz
 router.get('/main/atriz/:id', async (req, res) => {
   try {
@@ -198,25 +241,5 @@ router.get('/main/studios/:id', async (req, res) => {
     res.status(500).send('Erro ao recuperar dados do item');
   }
 });
-
-/*
-router.get(['/gal'], async (req, res) => {
-  try {
-    res.render('galerias');
-  } catch (error) {
-    console.error('Erro ao recuperar dados do item', error);
-    res.status(500).send('Erro ao recuperar dados do item');
-  }
-});
-
-router.get(['/gal2'], async (req, res) => {
-  try {
-    res.render('galerias');
-  } catch (error) {
-    console.error('Erro ao recuperar dados do item', error);
-    res.status(500).send('Erro ao recuperar dados do item');
-  }
-});
-*/
 
 module.exports = router;
