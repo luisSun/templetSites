@@ -1,35 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const executeQuery = require('../db/db');
-const multer  = require('multer')
-const path = require('path');
-//const upload = multer({ dest: 'C:\\Users\\Fernando\\Desktop\\Dump' })
-// Função para formatar os nomes como desejado
-function formatName(name) {
-  return name.split(',').map(part => part.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase())).filter(part => part !== '').join(',');
-}
-
-function getMimeType(file) {
-  return file.mimetype.split('/')[1]; // Pega a parte após a barra
-}
-
-// Configuração do multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'F:\\movies\\pn'); // Diretório base onde os arquivos serão armazenados
-  },
-  filename: (req, file, cb) => {
-    const { title, studio, atriz } = req.body;
-    const formattedTitle = title.trim().replace(/\s+/g, '_');
-    const formattedStudio = formatName(studio).split(',')[0]; // Pega apenas a primeira parte antes da vírgula
-    const formattedAtriz = formatName(atriz).split(',')[0]; // Pega apenas a primeira parte antes da vírgula
-    const fileExt = path.extname(file.originalname);
-    const fileName = `${formattedStudio}-${formattedTitle}-${formattedAtriz}${fileExt}`;
-    cb(null, fileName);
-  }
-});
-
-const upload = multer({ storage: storage });
 
 
 router.get(['/adm'], async (req, res) => {
@@ -103,11 +74,11 @@ router.get(['/adm/add'], async (req, res) => {
 //POST
 */
 
-router.post('/add', upload.single('avatar'), async (req, res) => {
+router.post('/add', async (req, res) => {
   //console.log(req.body)
   try {
       const { title, studio, atriz, capa, midia, tipoMidia, tags, ativo } = req.body;
-      const midiac = req.file.filename;
+      const midiac = midia + '.' + tipoMidia;
       // Tratamento das tags
       const formattedTags = tags.split(',').map(tag => {
         // Remover espaços em branco antes e depois da tag
@@ -141,15 +112,8 @@ router.post('/add', upload.single('avatar'), async (req, res) => {
     
         return name;
         }).filter(name => name !== '').join(',');
-
-      // Verifica se o arquivo foi enviado
-      if (!req.file) {
-        return res.status(400).send('Arquivo não enviado');
-      }else{
-        console.log(`${req.file.filename} enviado!`);
-      }
-
- 
+        console.log(formattedStudio)
+  
       // Insira os dados no banco de dados
       await executeQuery('INSERT INTO pn (title, studio, atriz, cover, midia, tags, ativo) VALUES (?, ?, ?, ?, ?, ?, ?)', [title, formattedStudio, formattedatriz, capa, midiac, formattedTags, ativo]);
       

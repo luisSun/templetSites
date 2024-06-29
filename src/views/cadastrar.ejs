@@ -7,7 +7,7 @@
                         <h3>Cadastrar</h3>
                     </div>
                     <div class="article-body" id="card-container">
-                        <form class="form-enviar" action="/add" method="POST">
+                        <form class="form-enviar" action="/add" enctype="multipart/form-data" method="POST">
 
                             <label for="title">Título:</label>
                             <input type="text" id="title" name="title" required><br><br>
@@ -21,14 +21,9 @@
                             <label for="capa">Capa:</label>
                             <input type="text" id="capa" name="capa" required><br><br>
         
-                            <label for="midia">Mídia:</label>
-                            <input type="text" id="midia" name="midia" required><br><br>
-                            <select name="tipoMidia" id="tipoMidia">
-                                <option value="mp4">MP4</option>
-                                <option value="mkv">MKV</option>
-                                <option value="avi">AVI</option>
-                                <option value="wmv">WMV</option>
-                            </select><br><br>
+                            <label for="avatar">Mídia:</label>
+                            <input type="file" name="avatar" />
+                            <br><br>
         
                             <label for="tags">Tags:</label>
                             <input type="text" id="tags" name="tags" required><br><br>
