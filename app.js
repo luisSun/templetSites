@@ -14,6 +14,7 @@ const middleware = require('./src/middleware/middleware.js');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+
 //Viwes EJS
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/src/views');
@@ -27,6 +28,9 @@ app.use(middleware.staticMiddleware);
 app.use('/media', middleware.mediaMiddleware);
 app.use('/pn', middleware.pnMiddleware);
 app.use('/pn', middleware.pnmdMiddleware);
+
+
+
 
 //Rotas
 app.use('/', homeRouter);
