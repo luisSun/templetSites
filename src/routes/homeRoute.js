@@ -12,10 +12,12 @@ router.get(['/', '/main', '/home'], async (req, res) => {
 
     const selectedItem = await executeQuery(`SELECT * FROM pn WHERE ativo = "A" ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`);
 
+    const selectAll = await executeQuery(`SELECT * FROM pn WHERE ativo = "A" ORDER BY id DESC`);
+
     const totalItems = await executeQuery('SELECT COUNT(*) AS total FROM pn WHERE ativo = "A"');
     const totalPages = Math.ceil(totalItems[0].total / limit);
 
-    res.render('main', { selectedItem, studios, totalPages });
+    res.render('main', { selectedItem, selectAll, studios, totalPages });
   } catch (error) {
     console.error('Erro ao recuperar dados do item', error);
     res.status(500).send('Erro ao recuperar dados do item');
@@ -87,15 +89,15 @@ router.get('/main/tags/:id', async (req, res) => {
     const totalItems = await executeQuery(`SELECT COUNT(*) AS total FROM pn WHERE FIND_IN_SET(?, tags) AND ativo = "A"ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`, [itemId]);
     const totalPages = Math.ceil(totalItems[0].total / limit);
     
-
     const selectedItem = await executeQuery(`SELECT * FROM pn WHERE FIND_IN_SET(?, tags) AND ativo = "a" ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`, [itemId]);
-    console.log(selectedItem)
+    
+    const selectAll = await executeQuery(`SELECT * FROM pn WHERE FIND_IN_SET(?, tags) AND ativo = "A" order by id DESC`, [itemId]);
 
     if (!selectedItem || selectedItem.length === 0) {
       throw new Error('Nenhum item encontrado para o ID fornecido.');
     }
 
-    res.render('main', { selectedItem: selectedItem, studios, totalPages });
+    res.render('main', { selectedItem: selectedItem, selectAll, studios, totalPages });
   } catch (error) {
     console.error('Erro ao recuperar dados do item', error);
     res.status(500).send('Erro ao recuperar dados do item');
@@ -203,13 +205,15 @@ router.get('/main/atriz/:id', async (req, res) => {
     const totalItems = await executeQuery('SELECT COUNT(*) AS total FROM pn WHERE FIND_IN_SET(?, atriz) AND ativo = "A"', [itemId]);
     const totalPages = Math.ceil(totalItems[0].total / limit);
 
+    const selectAll = await executeQuery(`SELECT * FROM pn WHERE FIND_IN_SET(?, atriz) AND ativo = "A" order by id DESC`, [itemId]);
+
     const selectedItem = await executeQuery('SELECT * FROM pn WHERE FIND_IN_SET(?, atriz) AND ativo = "A" ORDER BY id DESC LIMIT ?, ?', [itemId, offset, limit]);
 
     if (!selectedItem || selectedItem.length === 0) {
       throw new Error('Nenhum item encontrado para o ID fornecido.');
     }
 
-    res.render('main', { selectedItem: selectedItem, studios, totalPages });  // Passando totalPages para o template
+    res.render('main', { selectedItem: selectedItem, selectAll, studios, totalPages });  // Passando totalPages para o template
   } catch (error) {
     console.error('Erro ao recuperar dados do item', error);
     res.status(500).send('Erro ao recuperar dados do item');
@@ -226,8 +230,10 @@ router.get('/main/studios/:id', async (req, res) => {
 
     const studios = await executeQuery('SELECT DISTINCT studio FROM pn WHERE ativo = "A" ORDER BY studio');
 
-    const totalItems = await executeQuery('SELECT COUNT(*) AS total FROM pn WHERE FIND_IN_SET(?, studio) AND ativo = "A"', [itemId]);
+    const totalItems = await executeQuery('SELECT COUNT(*) AS total FROM pn WHERE FIND_IN_SET(?, studio) AND ativo = "A" order by id DESC', [itemId]);
     const totalPages = Math.ceil(totalItems[0].total / limit);
+
+    const selectAll = await executeQuery(`SELECT * FROM pn WHERE FIND_IN_SET(?, studio) AND ativo = "A" order by id DESC`, [itemId]);
 
     const selectedItem = await executeQuery('SELECT * FROM pn WHERE FIND_IN_SET(?, studio) AND ativo = "A" ORDER BY id DESC LIMIT ?, ?', [itemId, offset, limit]);
 
@@ -235,7 +241,7 @@ router.get('/main/studios/:id', async (req, res) => {
       throw new Error('Nenhum item encontrado para o ID fornecido.');
     }
 
-    res.render('main', { selectedItem: selectedItem, studios, totalPages });  // Passando totalPages para o template
+    res.render('main', { selectedItem: selectedItem, selectAll, studios, totalPages });  // Passando totalPages para o template
   } catch (error) {
     console.error('Erro ao recuperar dados do item', error);
     res.status(500).send('Erro ao recuperar dados do item');

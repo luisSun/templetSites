@@ -1,40 +1,79 @@
 <%- include('partials/head.ejs') %>
 <%- include('partials/aside.ejs') %>
-        <section id="main-content">
-            <div class="main">
-                <div class="article">
-                    <div class="article-header">
-                        <h3>Cabeçalho artigo New HD videos</h3>
-                    </div>
-                    <div class="article-body" id="card-container">
-                        <% for (let i = 0; i < selectedItem.length; i++) { %>
-                        <div class="card">
-                            <div class="card-img">
-                                <a href="/watch/<%= selectedItem[i].id %>"><img class="img-thumb"src="<%= selectedItem[i].cover %>.jpg" alt="<%= selectedItem[i].title %>"></a>
-                            </div>
-                            <div class="card-text">
-                                <a href="/watch/<%= selectedItem[i].id %>"><h4><%= selectedItem[i].title.length > 20 ? selectedItem[i].title.substring(0, 42) + '...' : selectedItem[i].title %></h4></a>
-                                <li> <i class="fas fa-star"></i> Atriz: <%= selectedItem[i].atriz %></li>
-                            </div>
-                            <div class="rectangle">
-                                <h5><%= selectedItem[i].studio %></h5>
-                            </div>
-                        </div>
-                        <% } %>
-                    </div>
+<section id="main-content">
+    <div class="main">
+        <div class="article">
+            <div class="article-header">
+                <h3>Cabeçalho artigo New HD videos</h3>
+                <div class="divSearch">
+                    <label for="search">Buscar dados</label>
+                    <input type="search" id="search" />
                 </div>
             </div>
-        </section>
-    </main>
-    <footer class="pag">
-        <% for (let i = 1; i <= totalPages; i++) { %>
-            <a href="/?page=<%= i %>"><%= i %></a>
-        <% } %>
-    </footer>
-</div>
+            <div class="article-body content" id="card-container">
+                <% for (let i = 0; i < selectedItem.length; i++) { %>
+                <div class="card">
+                    <div class="card-img">
+                        <a href="/watch/<%= selectedItem[i].id %>"><img class="img-thumb" src="<%= selectedItem[i].cover %>.jpg" alt="<%= selectedItem[i].title %>"></a>
+                    </div>
+                    <div class="card-text">
+                        <a href="/watch/<%= selectedItem[i].id %>">
+                            <h4><%= selectedItem[i].title.length > 20 ? selectedItem[i].title.substring(0, 42) + '...' : selectedItem[i].title %></h4>
+                        </a>
+                        <li><i class="fas fa-star"></i> Atriz: <%= selectedItem[i].atriz %></li>
+                    </div>
+                    <div class="rectangle">
+                        <h5><%= selectedItem[i].studio %></h5>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+<footer class="pag">
+    <% for (let i = 1; i <= totalPages; i++) { %>
+        <a href="/?page=<%= i %>"><%= i %></a>
+    <% } %>
+</footer>
 <div id="show-aside-square" onclick="toggleAside()">☰</div>
-<script src="/script/script.js">
 
+<script>
+    const content = document.querySelector(".content");
+    const inputSearch = document.querySelector("input[type='search']");
+
+    const items = <%- JSON.stringify(selectAll) %>;
+
+    inputSearch.oninput = () => {
+        content.innerHTML = "";
+        const query = inputSearch.value.toLowerCase();
+        
+        const filteredItems = items.filter(item => item.title.toLowerCase().includes(query) || item.atriz.toLowerCase().includes(query) || item.studio.toLowerCase().includes(query));
+
+        filteredItems.forEach(item => addHTML(item));
+    };
+
+    function addHTML(item) {
+        const card = document.createElement("div");
+        card.classList.add("card");
+
+        const cardImg = document.createElement("div");
+        cardImg.classList.add("card-img");
+        cardImg.innerHTML = `<a href="/watch/${item.id}"><img class="img-thumb" src="${item.cover}.jpg" alt="${item.title}"></a>`;
+
+        const cardText = document.createElement("div");
+        cardText.classList.add("card-text");
+        cardText.innerHTML = `<a href="/watch/${item.id}"><h4>${item.title.length > 20 ? item.title.substring(0, 42) + '...' : item.title}</h4></a><li><i class="fas fa-star"></i> Atriz: ${item.atriz}</li>`;
+
+        const rectangle = document.createElement("div");
+        rectangle.classList.add("rectangle");
+        rectangle.innerHTML = `<h5>${item.studio}</h5>`;
+
+        card.append(cardImg, cardText, rectangle);
+        content.append(card);
+    }
 </script>
+
 </body>
 </html>
