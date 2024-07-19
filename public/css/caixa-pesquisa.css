@@ -1,0 +1,11 @@
+.divSearch {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  input {
+    padding: 5px;
+    outline: none;
+    border-radius: 5px;
+  }

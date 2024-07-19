@@ -1,4 +1,4 @@
-
+//Auto Completa em Tags e para cadastrar
 // Function to split input value
 function split(val) {
     return val.split(/,\s*/);
