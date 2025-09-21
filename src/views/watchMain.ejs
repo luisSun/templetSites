@@ -1,0 +1,176 @@
+<%- include('partials/head.ejs') %>
+<%- include('partials/aside.ejs') %>
+<!-- Início após o head/aside -->
+<section id="main-content">
+    <div class="main">
+        <div class="article">
+            <div class="article-header">
+                <h3><%= selectedItem.title %></h3>
+                <button id="showTileButton" onclick="toggleTileForm()">🛠️</button>
+            </div>
+            <br>
+            
+            <form id="editTileForm" action="/adm/editartitle" method="post" style="display: none;">
+                <input type="hidden" id="itemId" name="id" value="<%= selectedItem.id %>">
+                <div id="tileContainer">
+                    <input type="text" id="title" name="title" value="<%= selectedItem.title %>" required>
+                    <button type="submit">Enviar</button>
+                </div>
+            </form>
+            <div class="article-body" id="card-container">
+                <div class="main-vide-content">
+                    <div class="video-part">
+                        <div class="vieo-header"></div>
+                        <div class="video-main">
+                            <video class="midia-vid" data-video-id="<%= selectedItem.id %>" controls poster="<%= selectedItem.cover %>.jpg" muted>
+                                <source src="/pn/<%= selectedItem.midia %>">
+                                Seu navegador não suporta o elemento de vídeo.
+                            </video> 
+                            <div class="video-overlay">
+                                <button id="btnContinue">Continuar</button>
+                                <button id="btnRestart">Voltar do Início</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="video-footer">
+                        <div class="video-infos">
+                            <ul class="infos">                                
+
+                                <ul class="tag-list">
+                                    <li>
+                                        <i class="fa-solid fa-video"></i> Studio:
+                                    
+                                        <% 
+                                        const formattedStudios = studioArray
+                                            .map(studio => studio.trim())                                   // Remove espaços
+                                            .filter(studio => studio !== '')                                // Remove vazios
+                                            .map(studio => studio.charAt(0).toUpperCase() + studio.slice(1)); // Capitaliza                                                     // Ordena
+                                    
+                                        formattedStudios.forEach((studio, index) => { %>
+                                            <a href="/main/studios/<%= studio %>" class="tag-button"><i class="fa-solid fa-video" aria-hidden="true"></i> <%= studio %></a>
+                                        <% }); %>
+                                    </li>
+                                </ul>
+                                
+
+                                <ul class="tag-list">
+                                <li>
+                                    <i class="ftags-capt fa fa-star"></i> Star:
+                                
+                                    <% 
+                                    const formattedAtrizes = atrizArray
+                                        .map(atriz => atriz.trim())                                   // remove espaços
+                                        .filter(atriz => atriz !== '')                                // remove vazios
+                                        .map(atriz => atriz.charAt(0).toUpperCase() + atriz.slice(1)) // capitaliza
+                                        .sort();                                                      // ordena
+                                
+                                    formattedAtrizes.forEach((atriz, index) => { %>
+                                        <li> <a href="/main/atriz/<%= atriz %>" class="star-button"><i class="ftags-capt fa fa-star" aria-hidden="true"></i> <%= atriz %></a></li>
+                                    <% }); %>
+                                </li>
+                                </ul>
+
+                                <ul class="tag-list">
+                                    <li><i class="fa fa-archive" aria-hidden="true"></i> Tags:</li>
+                                    <% 
+                                    const formattedTags = tagsArray
+                                        .map(tag => tag.trim())
+                                        .filter(tag => tag !== '')
+                                        .map(tag => tag.charAt(0).toUpperCase() + tag.slice(1))
+                                        .sort();
+                                    formattedTags.forEach(tag => { %>
+                                        <li> <a href="/main/tags/<%= tag %>" class="tag-button"><i class="fa fa-tag" aria-hidden="true"></i> <%= tag %></a></li>
+                                    <% }); %>
+                                </ul>
+
+                                <button id="showTagsButton" onclick="toggleTagsForm()">Editar Tags</button>
+                                <form id="editTagsForm" action="/adm/editartag" method="post" style="display: none;">
+                                    <input type="hidden" id="itemId" name="id" value="<%= selectedItem.id %>">
+                                    <div id="tagsContainer">
+                                        <input type="text" id="tags" name="tags" value="<%= selectedItem.tags %>" required>
+                                        <button type="submit">Enviar</button>
+                                    </div>
+                                </form>
+                            </ul>
+                        </div>
+                        <div class="recomendacoes">
+                            <p>Adicionar uma pequena carrossel com recomendações</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+<footer>
+    <p>Footer</p>
+</footer>
+
+<script>
+// Alternar exibição do formulário de edição de título
+function toggleTileForm() {
+    var form = document.getElementById('editTileForm');
+    form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+}
+
+// Alternar exibição do formulário de edição de tags
+function toggleTagsForm() {
+    var form = document.getElementById('editTagsForm');
+    form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+}
+
+// Função para dividir valores
+function split(val) {
+    return val.split(/,\s*/);
+}
+
+// Função para extrair o último termo digitado
+function extractLast(term) {
+    var terms = split(term);
+    return terms[terms.length - 1];
+}
+
+// Função de autocomplete para inputs específicos
+function setupAutocomplete(inputId, uniqueData) {
+    $(inputId)
+        .on("keydown", function(event) {
+            if (event.keyCode === $.ui.keyCode.TAB &&
+                $(this).autocomplete("instance").menu.active) {
+                event.preventDefault();
+            }
+        })
+        .autocomplete({
+            minLength: 0,
+            source: function(request, response) {
+                var results = $.ui.autocomplete.filter(uniqueData, extractLast(request.term));
+                response(results.slice(0, 5)); // Limita a 5 sugestões
+            },
+            focus: function() {
+                return false;
+            },
+            select: function(event, ui) {
+                var terms = split(this.value);
+                terms.pop();
+                terms.push(ui.item.value);
+                terms.push("");
+                this.value = terms.join(", ");
+                return false;
+            }
+        }).autocomplete("instance")._renderItem = function(ul, item) {
+            return $("<li>")
+                .append("<div>" + item.label + "</div>")
+                .appendTo(ul);
+        };
+}
+
+$(function() {
+    // Ativar autocomplete para o campo de tags
+    setupAutocomplete("#tags", JSON.parse('<%- JSON.stringify(uniqueTags) %>'));
+
+    // Ativar autocomplete para o campo de título, garantindo unicidade
+    setupAutocomplete("#tile", JSON.parse('<%- JSON.stringify(selectedItem.title) %>'));
+});
+</script>
+
+<%- include('partials/body_end.ejs') %>

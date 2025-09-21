@@ -33,7 +33,6 @@
                                 <%= atrizes[0] %> e <%= atrizes.length - 1 %> mais
                             <% } %>
                         </li>
-                        
                     </div>
                     <div class="rectangle">
                         <h5><%= selectedItem[i].studio.split(',')[0] %></h5>
@@ -48,18 +47,17 @@
 <footer class="pag">
     <div class="pagination">
         <% if (page > 1) { %>
-          <a href="/?page=<%= page - 1 %>">Anterior</a>
+          <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= page - 1 %>">Anterior</a>
         <% } %>
       
         <% for (let i = 1; i <= totalPages; i++) { %>
-          <a href="/?page=<%= i %>" class="<%= page === i ? 'active' : '' %>"><%= i %></a>
+          <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= i %>" class="<%= page === i ? 'active' : '' %>"><%= i %></a>
         <% } %>
       
         <% if (page < totalPages) { %>
-          <a href="/?page=<%= page + 1 %>">Próxima</a>
+          <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= page + 1 %>">Próxima</a>
         <% } %>
       </div>
-      
 </footer>
 <div id="show-aside-square" onclick="toggleAside()">☰</div>
 

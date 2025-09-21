@@ -70,6 +70,19 @@ router.get(['/adm'], async (req, res) => {
   }
 });
 
+
+
+router.get(['/lista'], async (req, res) => {
+  try {
+      const selectedItemI = await executeQuery('SELECT * FROM pn WHERE ativo = "A"');
+
+      res.render('lista', { selectedItemI: selectedItemI});
+  } catch (error) {
+      console.error('Erro ao recuperar dados do item', error);
+      res.status(500).send('Erro ao recuperar dados do item');
+  }
+});
+
 /*
 //Rota para Adicionar novo Conteudo
 //GET
@@ -204,8 +217,42 @@ router.post(['/adm/editartag'], async (req, res) => {
   // Insira os dados no banco de dados
       await executeQuery('UPDATE pn SET tags = ? WHERE id = ?', [formattedTags, id]);
       // Enviar resposta ao cliente
-      res.send('<script>alert("Imagens enviadas com sucesso!"); window.location.href = "/adm";</script>');
+      res.send('<script>alert("Imagens enviadas com sucesso!"); window.location.href = document.referrer;</script>');
 });
 
+router.post(['/adm/editartitle'], async (req, res) => {
+  const { id, title } = req.body;
+
+  console.log("Título recebido:", title);
+  
+  // Garante que title é uma string válida ou define um valor padrão
+  let formattedTitle = title ? String(title).trim() : "";
+  
+  // Só processa o título se ele não estiver vazio
+  if (formattedTitle) {
+      // Remove espaços duplos apenas se existirem
+      if (/\s{2,}/.test(formattedTitle)) {
+          formattedTitle = formattedTitle.replace(/\s+/g, ' '); // Remove espaços extras
+      }
+  
+      // Remove caracteres especiais apenas se existirem
+      if (/[$'"/\\]/.test(formattedTitle)) {
+          formattedTitle = formattedTitle.replace(/[$'"/\\]/g, ''); // Remove caracteres especiais problemáticos
+      }
+  
+      // Capitaliza a primeira letra de cada palavra
+      formattedTitle = formattedTitle.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+  }
+  
+  console.log("Título formatado:", formattedTitle);
+  
+
+  // Insira os dados no banco de dados
+      await executeQuery('UPDATE pn SET title = ? WHERE id = ?', [formattedTitle, id]);
+      // Enviar resposta ao cliente
+      res.send('<script>alert("Imagens enviadas com sucesso!"); window.location.href = document.referrer;</script>');
+
+
+});
 
 module.exports = router;

@@ -87,3 +87,45 @@ section {
 .form-enviar input[type="submit"]:hover {
     background-color: #0056b3; /* Altera a cor de fundo ao passar o mouse sobre o botão */
 }
+
+.article-header {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaço entre o título e o botão */
+}
+
+.article-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+#showTileButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px; /* Ajusta o tamanho do ícone */
+    padding: 5px;
+    transition: transform 0.2s ease;
+}
+
+#showTileButton:hover {
+    transform: scale(1.2);
+}
+.article-header {
+    display: flex;
+    flex-direction: column; /* Organiza os elementos verticalmente */
+    align-items: flex-start; /* Alinha à esquerda */
+    gap: 10px; /* Espaço entre os elementos */
+}
+
+.divSearch {
+    width: 100%; /* Ocupa a largura total */
+}
+
+#search {
+    width: 100%; /* Faz o input ocupar toda a largura disponível */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
