@@ -111,18 +111,40 @@
 <div id="show-aside-square" onclick="toggleAside()">☰</div>
 
 <script>
-    function toggleForm(id) {
-        var form = document.getElementById('form-' + id);
-        var button = document.getElementById('button-' + id);
-        if (form.style.display === 'none') {
-            form.style.display = 'block';
-            button.innerText = 'Ocultar';
+    // filtro por status
+    function filterRecords(status) {
+      $("#content li").each(function () {
+        var ativo = $(this).find("select[name='ativo']").val().toUpperCase();
+        if (status === "ALL" || ativo === status) {
+          $(this).show();
         } else {
-            form.style.display = 'none';
-            button.innerText = 'Editar';
+          $(this).hide();
         }
+      });
     }
-</script>
+  
+    // busca em tempo real
+    $(document).ready(function () {
+      $("#search-input").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#content li").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+      });
+    });
+  
+    // busca ao clicar no botão "Search"
+    function searchRecords() {
+      var value = $("#search-input").val().toLowerCase();
+      $("#content li").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+      });
+    }
+
+
+    function toggleForm(id) { var form = document.getElementById('form-' + id); var button = document.getElementById('button-' + id); if (form.style.display === 'none') { form.style.display = 'block'; button.innerText = 'Ocultar'; } else { form.style.display = 'none'; button.innerText = 'Editar'; } }
+  </script>
+  
 
 
 </body>

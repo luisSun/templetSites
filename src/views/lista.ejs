@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="article-body article" id="card-container">
+        <div class="divSearch">
+            <label for="search">Buscar dados</label>
+            <input type="search" id="search" />
+        </div>
+                
+        <div class="ativosmeme content" style="background-color: white;">
+
+            
+            <button onclick="filterRecords('A')">ATIVO</button>
+            <button onclick="filterRecords('I')">INATIVO</button>
+            <button onclick="filterRecords('M')">MODERACAO</button>
+            <button onclick="filterRecords('ALL')">TODOS</button>
+            <ul id="content">
+                
+                
+                <% for (let i = 0; i < selectedItemI.length; i++) { %>
+                    
+                    <li>
+                        <a href="/watch/<%= selectedItemI[i].id %>">ID:<%= selectedItemI[i].id %> - <%= selectedItemI[i].title %></a>
+                        <span style="float:right;">
+                            <button onclick="mostrar('<%= selectedItemI[i].id %>')">mostrar</button>
+                            <button onclick="editar(`<%= selectedItemI[i].id %>`)">Editar</button>
+                        </span>
+                        <div style="clear:both;"></div>
+                        <!-- Formulário de edição -->
+                        <form id="form-<%= selectedItemI[i].id %>" class="modern-form" style="display:none;" action="/adm/editar" method="POST">
+                            <!-- Campos do formulário -->
+                            <div class="form-group">
+                                <input type="hidden" name="id" value="<%= selectedItemI[i].id %>">
+                                <label for="title">Title</label>
+                                <input type="text" name="title" value="<%= selectedItemI[i].title %>" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="atriz">Atriz</label>
+                                <input type="text" name="atriz" value="<%= selectedItemI[i].atriz %>" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="studio">Studio</label>
+                                <input type="text" name="studio" value="<%= selectedItemI[i].studio %>" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="tags">Tags:</label>
+                                <input type="text" id="tag" name="tags" value="<%= selectedItemI[i].tags %>" required><br><br>
+                            </div>
+                            <div class="form-group">
+                                <label for="cover">Capa</label>
+                                <input type="text" name="cover" value="<%= selectedItemI[i].cover %>" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="midia">Midia</label>
+                                <input type="text" name="midia" value="<%= selectedItemI[i].midia %>" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ativo">Tipo Midia:</label>
+                                <select name="ativo" id="ativo" class="form-control">
+                                        <option value="a" <%= selectedItemI[i].ativo.toLowerCase() === 'a' ? 'selected' : '' %>>ATIVO</option>
+                                        <option value="i" <%= selectedItemI[i].ativo.toLowerCase() === 'i' ? 'selected' : '' %>>INATIVO</option>
+                                        <option value="m" <%= selectedItemI[i].ativo.toLowerCase() === 'm' ? 'selected' : '' %>>MODERACAO</option>
+                                    </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ativo">Ativo:</label>
+                                <select name="ativo" id="ativo" class="form-control">
+                                        <option value="a" <%= selectedItemI[i].ativo.toLowerCase() === 'a' ? 'selected' : '' %>>ATIVO</option>
+                                        <option value="i" <%= selectedItemI[i].ativo.toLowerCase() === 'i' ? 'selected' : '' %>>INATIVO</option>
+                                        <option value="m" <%= selectedItemI[i].ativo.toLowerCase() === 'm' ? 'selected' : '' %>>MODERACAO</option>
+                                    </select>
+                            </div>
+                            
+                            <!-- Um campo de botão para enviar o formulário -->
+                            <button type="submit" class="btn btn-orange">Salvar</button>
+                            <br>
+                        </form>
+                        
+                    </li>
+                <% } %>              
+            </ul>
+            <footer class="pag">
+
+                
+            </footer>
+        </div>
+      </div>
+</body>
+
+<script>
+// Pesquisa Dinamica
+const content = document.querySelector("#content");
+const inputSearch = document.querySelector("input[type='search']");
+
+const items = <%- JSON.stringify(selectedItemI) %>;
+
+inputSearch.oninput = () => {
+    content.innerHTML = ""; // Limpar o conteúdo atual
+    const query = inputSearch.value.toLowerCase();
+    
+    const filteredItems = items.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        item.atriz.toLowerCase().includes(query) || 
+        item.studio.toLowerCase().includes(query)
+    );
+
+    filteredItems.forEach(item => addHTML(item));
+};
+
+function addHTML(item) {
+    const li = document.createElement("li");
+
+    const link = document.createElement("a");
+    link.href = `/watch/${item.id}`;
+    link.textContent = `ID:${item.id} - ${item.title}`;
+    
+    const span = document.createElement("span");
+    span.style.float = "right";
+
+    const mostrarButton = document.createElement("button");
+    mostrarButton.textContent = "mostrar";
+    mostrarButton.onclick = () => mostrar(item.id);
+
+    const editarButton = document.createElement("button");
+    editarButton.textContent = "Editar";
+    editarButton.onclick = () => editar(item.id);
+
+    span.appendChild(mostrarButton);
+    span.appendChild(editarButton);
+
+    li.appendChild(link);
+    li.appendChild(span);
+    li.appendChild(document.createElement("div")).style.clear = "both";
+
+    const form = document.createElement("form");
+    form.id = `form-${item.id}`;
+    form.className = "modern-form";
+    form.style.display = "none";
+    form.action = "/adm/editar";
+    form.method = "POST";
+
+    form.innerHTML = `
+        <div class="form-group">
+            <input type="hidden" name="id" value="${item.id}">
+            <label for="title">Title</label>
+            <input type="text" name="title" value="${item.title}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="atriz">Atriz</label>
+            <input type="text" name="atriz" value="${item.atriz}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="studio">Studio</label>
+            <input type="text" name="studio" value="${item.studio}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="tags">Tags:</label>
+            <input type="text" id="tag" name="tags" value="${item.tags}" required><br><br>
+        </div>
+        <div class="form-group">
+            <label for="cover">Capa</label>
+            <input type="text" name="cover" value="${item.cover}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="midia">Midia</label>
+            <input type="text" name="midia" value="${item.midia}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="ativo">Tipo Midia:</label>
+            <select name="ativo" id="ativo" class="form-control">
+                <option value="a" ${item.ativo.toLowerCase() === 'a' ? 'selected' : ''}>ATIVO</option>
+                <option value="i" ${item.ativo.toLowerCase() === 'i' ? 'selected' : ''}>INATIVO</option>
+                <option value="m" ${item.ativo.toLowerCase() === 'm' ? 'selected' : ''}>MODERACAO</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="ativo">Ativo:</label>
+            <select name="ativo" id="ativo" class="form-control">
+                <option value="a" ${item.ativo.toLowerCase() === 'a' ? 'selected' : ''}>ATIVO</option>
+                <option value="i" ${item.ativo.toLowerCase() === 'i' ? 'selected' : ''}>INATIVO</option>
+                <option value="m" ${item.ativo.toLowerCase() === 'm' ? 'selected' : ''}>MODERACAO</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-orange">Salvar</button><br>
+    `;
+
+    li.appendChild(form);
+    content.appendChild(li);
+}
+
+function editar(id) {
+    const form = document.getElementById(`form-${id}`);
+    if (form.style.display === "none" || form.style.display === "") {
+        form.style.display = "block";
+    } else {
+        form.style.display = "none";
+    }
+}
+</script>
+</html>

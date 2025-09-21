@@ -1,12 +1,28 @@
 <div id="aside">
     <h3 style="color: #ffffff;"><i class="fas fa-video icone-li"> </i> Studios</h3>
 
-    <ul class="ul-aside">
-        
-        <% studios.forEach(studio => { %>
-            <a href="/main/studios/<%= studio.studio %>"><li class="li-aside"><%= studio.studio %></li></a>
-        <% }); %>
-    </ul>
+    <%
+    // cria uma lista a partir do que vier em studios
+    let studiosList = studios
+      .map(s => s.studio.split(','))     // divide cada "studio1,studio2"
+      .flat()                            // achata em um array só
+      .map(s => s.trim())                // remove espaços extras
+      .filter(s => s.length > 0);        // remove strings vazias
+  
+    // remove duplicados
+    studiosList = [...new Set(studiosList)];
+  
+    // ordena alfabeticamente
+    studiosList.sort((a, b) => a.localeCompare(b));
+  %>
+  
+  <ul class="ul-aside">
+    <% studiosList.forEach(studio => { %>
+      <li class="li-aside">
+        <a href="/main/studios/<%= studio %>"><%= studio %></a>
+      </li>
+    <% }); %>
+  </ul>
 </div>
 
 <div id="show-aside-square">Aside</div>

@@ -1,0 +1,81 @@
+.ativa {
+    display: none; /* Inicialmente oculta */
+    text-align: center;
+    margin-top: 20px;
+    opacity: 0; /* Opacidade inicial 0 */
+    transition: opacity 0.3s ease; /* Transição suave de opacidade */
+}
+.ativa.mostrar {
+    display: block;
+    opacity: 1; /* Mostra a div alterando a opacidade para 1 */
+}
+.ativaDesativa {
+    display: flex;
+    flex-direction: row;
+}
+.btn-toggle {
+    width: 77px;
+    height: auto;
+    margin: auto;
+    background-color: #eeeeeef0;
+    border-radius: 100px;
+}
+.btn {
+    position: relative;
+    top: 50%;
+    width: 74px;
+    height: 46px;
+    margin: -20px auto 0 auto;
+    overflow: hidden;
+}
+.btn.r,
+.btn.r .off {
+    border-radius: 100px;
+}
+.checkbox {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 3;
+}
+.on {
+    z-index: 2;
+}
+.off {
+    width: 100%;
+    background-color: #ebf7fc;
+    transition: 0.3s ease all;
+    z-index: 1;
+}
+#btn-switch .on:before {
+    content: "ON";
+    position: absolute;
+    top: 40%; /* Posição vertical central */
+    transform: translateY(-40%); /* Ajuste para centralizar verticalmente */
+    left: 4px;
+    width: 20px;
+    height: 10px;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    padding: 9px 4px;
+    background-color: #03a9f4;
+    border-radius: 50%;
+    transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+}
+#btn-switch .checkbox:checked + .on:before {
+    content: "OFF";
+    top: 40%; /* Posição vertical central */
+    transform: translateY(-40%); /* Ajuste para centralizar verticalmente */
+    left: 42px;
+    background-color: #f44336;
+}
+#btn-switch .checkbox:checked ~ .off {
+    background-color: #fcebeb;
+}

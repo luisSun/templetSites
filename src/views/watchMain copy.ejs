@@ -11,7 +11,6 @@
                         <div class="main-vide-content">
                             <div class="video-part">
                                 <div class="vieo-header">
-                                    
                                 </div>
                                 <div class="video-main">
                                     <video class="midia-vid" data-video-id="<%= selectedItem.id %>" controls poster="<%= selectedItem.cover %>.jpg" muted>
@@ -86,6 +85,20 @@
 </div>
 
 <script>
+
+var ativaVisivel = false; // Inicialmente oculto
+
+function toggleContent() {
+    var ativaDiv = document.getElementById("ativa");
+    ativaVisivel = !ativaVisivel; // Inverte o estado atual
+
+    if (ativaVisivel) {
+        ativaDiv.classList.add("mostrar");
+    } else {
+        ativaDiv.classList.remove("mostrar");
+    }
+}
+
 function toggleTagsForm() {
     var form = document.getElementById('editTagsForm');
     if (form.style.display === 'none') {
