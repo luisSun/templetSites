@@ -95,6 +95,18 @@
       
           <!-- Botão de página aleatória -->
           <button onclick="goRandomPage()">?</button>
+
+      <% if (page > 1) { %>
+          <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= page - 1 %>">Anterior</a>
+        <% } %>
+      
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= i %>" class="<%= page === i ? 'active' : '' %>"><%= i %></a>
+        <% } %>
+      
+        <% if (page < totalPages) { %>
+          <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= page + 1 %>">Próxima</a>
+
         <% } %>
       </div>
 </footer>
@@ -136,19 +148,6 @@
         content.append(card);
     }
 
-    function goToPage() {
-    const page = parseInt(document.getElementById('goto-page').value);
-    if (page >= 1 && page <= <%= totalPages %>) {
-      window.location.href = `/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=${page}`;
-    } else {
-      alert('Digite um número válido entre 1 e <%= totalPages %>');
-    }
-  }
-
-  function goRandomPage() {
-    const randomPage = Math.floor(Math.random() * <%= totalPages %>) + 1;
-    window.location.href = `/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=${randomPage}`;
-  }
 </script>
 
 </body>
