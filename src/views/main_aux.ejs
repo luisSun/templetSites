@@ -46,7 +46,57 @@
 </main>
 <footer class="pag">
     <div class="pagination">
+        <% 
+          const firstPages = [1, 2, 3].filter(n => n <= totalPages);
+          const lastPages = [totalPages - 2, totalPages - 1, totalPages].filter(n => n > 3 && n <= totalPages);
+          const showExtraControls = totalPages > 3;
+        %>
+      
+        <!-- Primeira e Anterior -->
         <% if (page > 1) { %>
+          <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=1">Primeira</a>
+          <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= page - 1 %>">Anterior</a>
+        <% } %>
+      
+        <!-- Primeiras páginas -->
+        <% firstPages.forEach(i => { %>
+          <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= i %>" class="<%= page === i ? 'active' : '' %>"><%= i %></a>
+        <% }) %>
+      
+        <% if (showExtraControls) { %>
+          <!-- Reticências / Página atual -->
+          <% if (page > 4 && page <= totalPages - 3) { %>
+            <span>...</span>
+            <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= page %>" class="active"><%= page %></a>
+            <span>...</span>
+          <% } else if (page === 4) { %>
+            <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=4" class="active">4</a>
+            <span>...</span>
+          <% } else if (page > totalPages - 3) { %>
+            <span>...</span>
+          <% } %>
+        <% } %>
+      
+        <!-- Últimas páginas -->
+        <% lastPages.forEach(i => { %>
+          <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= i %>" class="<%= page === i ? 'active' : '' %>"><%= i %></a>
+        <% }) %>
+      
+        <!-- Seguinte e Última -->
+        <% if (page < totalPages) { %>
+          <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= page + 1 %>">Seguinte</a>
+          <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= totalPages %>">Última</a>
+        <% } %>
+      
+        <% if (showExtraControls) { %>
+          <!-- Input para ir para página específica -->
+          <input type="number" id="goto-page" min="1" max="<%= totalPages %>" placeholder="Página #" style="width:60px;">
+          <button onclick="goToPage()">Ir</button>
+      
+          <!-- Botão de página aleatória -->
+          <button onclick="goRandomPage()">?</button>
+
+      <% if (page > 1) { %>
           <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= page - 1 %>">Anterior</a>
         <% } %>
       
@@ -56,6 +106,7 @@
       
         <% if (page < totalPages) { %>
           <a href="/main/<%= auxiliar[1] %>/<%= auxiliar[0] %>?page=<%= page + 1 %>">Próxima</a>
+
         <% } %>
       </div>
 </footer>
@@ -96,6 +147,7 @@
         card.append(cardImg, cardText, rectangle);
         content.append(card);
     }
+
 </script>
 
 </body>
