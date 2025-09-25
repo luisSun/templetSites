@@ -47,18 +47,53 @@
 </main>
 <footer class="pag">
     <div class="pagination">
+        <% 
+          const firstPages = [1, 2, 3].filter(n => n <= totalPages);
+          const lastPages = [totalPages - 2, totalPages - 1, totalPages].filter(n => n > 3 && n <= totalPages);
+        %>
+      
+        <!-- Primeira e Anterior -->
         <% if (page > 1) { %>
+          <a href="/?page=1">Primeira</a>
           <a href="/?page=<%= page - 1 %>">Anterior</a>
         <% } %>
       
-        <% for (let i = 1; i <= totalPages; i++) { %>
+        <!-- Primeiras páginas -->
+        <% firstPages.forEach(i => { %>
           <a href="/?page=<%= i %>" class="<%= page === i ? 'active' : '' %>"><%= i %></a>
+        <% }) %>
+      
+        <!-- Reticências / Página atual -->
+        <% if (page > 4 && page <= totalPages - 3) { %>
+          <span>...</span>
+          <a href="/?page=<%= page %>" class="active"><%= page %></a>
+          <span>...</span>
+        <% } else if (page === 4) { %>
+          <a href="/?page=4" class="active">4</a>
+          <span>...</span>
+        <% } else if (page > totalPages - 3) { %>
+          <span>...</span>
         <% } %>
       
+        <!-- Últimas páginas -->
+        <% lastPages.forEach(i => { %>
+          <a href="/?page=<%= i %>" class="<%= page === i ? 'active' : '' %>"><%= i %></a>
+        <% }) %>
+      
+        <!-- Seguinte e Última -->
         <% if (page < totalPages) { %>
-          <a href="/?page=<%= page + 1 %>">Próxima</a>
+          <a href="/?page=<%= page + 1 %>">Seguinte</a>
+          <a href="/?page=<%= totalPages %>">Última</a>
         <% } %>
+      
+        <!-- Input para ir para página específica -->
+        <input type="number" id="goto-page" min="1" max="<%= totalPages %>" placeholder="Página #" style="width:60px;">
+        <button onclick="goToPage()">Ir</button>
+      
+        <!-- Botão de página aleatória -->
+        <button onclick="goRandomPage()">?</button>
       </div>
+      
       
 </footer>
 <div id="show-aside-square" onclick="toggleAside()">☰</div>
@@ -98,6 +133,21 @@
         card.append(cardImg, cardText, rectangle);
         content.append(card);
     }
+
+
+    function goToPage() {
+    const page = parseInt(document.getElementById('goto-page').value);
+    if (page >= 1 && page <= <%= totalPages %>) {
+      window.location.href = '/?page=' + page;
+    } else {
+      alert('Digite um número válido entre 1 e <%= totalPages %>');
+    }
+  }
+
+  function goRandomPage() {
+    const randomPage = Math.floor(Math.random() * <%= totalPages %>) + 1;
+    window.location.href = '/?page=' + randomPage;
+  }
 </script>
 
 </body>

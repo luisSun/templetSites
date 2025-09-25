@@ -1,6 +1,26 @@
-.pag a{
+.pagination a, .pagination span, .pagination button{
+    margin: 0 3px;
+    padding: 4px 8px;
     text-decoration: none;
-    color: aliceblue;
-    font-size: 30px;
-    margin: 10px;
-}
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: #fff;
+  }
+  .pagination .active {
+    font-weight: bold;
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+  }
+  .pagination input {
+    padding: 3px 5px;
+  }
+
+  .pagination input {
+    margin: 0 3px;
+    padding: 4px 8px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: #000000;
+  }

@@ -173,10 +173,30 @@ router.post('/add', upload.single('avatar'), async (req, res) => {
   }
 });
 
+router.post('/add-json', async (req, res) => {
+  try {
+    const { title, studio, atriz, capa, avatar, tags, ativo } = req.body;
+    const midiac = avatar; // pegar a URL/base64 do JSON
+
+    // Formata tags, studio e atriz igual antes
+    const formattedTags = tags.split(',').map(tag => tag.trim().replace(/\s+/g, '').toLowerCase()).filter(Boolean).join(',');
+    const formattedAtriz = atriz.split(',').map(name => name.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase())).filter(Boolean).join(',');
+    const formattedStudio = studio.split(',').map(name => name.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase())).filter(Boolean).join(',');
+
+    // Inserção no banco
+    await executeQuery('INSERT INTO pn (title, studio, atriz, cover, midia, tags, ativo) VALUES (?, ?, ?, ?, ?, ?, ?)', [title, formattedStudio, formattedAtriz, capa, midiac, formattedTags, ativo]);
+
+    res.status(200).json({ message: 'Item adicionado com sucesso!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erro ao adicionar item' });
+  }
+});
+
 /*
 //Rota para EDITAR Conteudo
 //GET
-*/
+
 
 router.post(['/adm/editar'], async (req, res) => {
   const { id, title, atriz, studio, tags, cover, midia, tmidia, ativo } = req.body;
@@ -198,6 +218,55 @@ router.post(['/adm/editar'], async (req, res) => {
       // Enviar resposta ao cliente
       res.send('<script>alert("Imagens enviadas com sucesso!"); window.location.href = "/adm";</script>');
 });
+*/
+
+router.post(['/adm/editar'], upload.single('avatar'), async (req, res) => {
+  try {
+    const { id, title, atriz, studio, tags, cover, midia, ativo } = req.body;
+
+    // Se houver upload de arquivo, use o filename, senão mantenha midia enviado
+    const midiac = req.file ? req.file.filename : midia;
+
+    const fields = [];
+    const values = [];
+
+    if (title) { fields.push('title = ?'); values.push(title); }
+
+    if (studio) {
+      const formattedStudio = studio.split(',').map(name => name.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase())).filter(Boolean).join(',');
+      fields.push('studio = ?'); values.push(formattedStudio);
+    }
+
+    if (atriz) {
+      const formattedAtriz = atriz.split(',').map(name => name.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase())).filter(Boolean).join(',');
+      fields.push('atriz = ?'); values.push(formattedAtriz);
+    }
+
+    if (tags) {
+      const formattedTags = tags.split(',').map(tag => tag.trim().replace(/\s+/g, '').toLowerCase()).filter(Boolean).join(',');
+      fields.push('tags = ?'); values.push(formattedTags);
+    }
+
+    if (cover) { fields.push('cover = ?'); values.push(cover); }
+    if (midiac) { fields.push('midia = ?'); values.push(midiac); }
+    if (ativo) { fields.push('ativo = ?'); values.push(ativo); }
+
+    if (fields.length === 0) {
+      return res.status(400).json({ message: 'Nenhum campo para atualizar' });
+    }
+
+    const query = `UPDATE pn SET ${fields.join(', ')} WHERE id = ?`;
+    values.push(id);
+
+    await executeQuery(query, values);
+
+    res.send('<script>alert("Item atualizado com sucesso!"); window.location.href = "/adm";</script>');
+  } catch (error) {
+    console.error('Erro ao atualizar item:', error);
+    res.status(500).send('Erro ao atualizar item');
+  }
+});
+
 
 router.post(['/adm/editartag'], async (req, res) => {
   const { id, tags } = req.body;
